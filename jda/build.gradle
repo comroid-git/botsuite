@@ -1,0 +1,9 @@
+version '0.1.0-SNAPSHOT'
+
+dependencies {
+    api project(':discord-ux:core')
+
+    compileOnly 'net.dv8tion:JDA:3.8.3_463'
+    runtimeOnly 'org.json:json:20190722'
+    runtimeOnly 'com.squareup.okhttp3:okhttp:3.14.3'
+}

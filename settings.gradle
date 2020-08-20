@@ -1,0 +1,8 @@
+rootProject.name = 'discordbotlist-stats'
+
+include(':core')
+
+include(':catnip')
+include(':discord4j')
+include(':javacord')
+include(':jda')

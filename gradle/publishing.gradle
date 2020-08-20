@@ -1,0 +1,83 @@
+if (project == rootProject)
+    apply plugin: "io.codearte.nexus-staging"
+
+subprojects {
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+
+    publishing {
+        repositories {
+            maven {
+                url = snapshot
+                        ? "https://oss.sonatype.org/content/repositories/snapshots"
+                        : "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                name = "Sonatype"
+
+                credentials {
+                    username sonatypeUsername
+                    password sonatypePassword
+                }
+            }
+        }
+
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                if (project.name.equals("${rootProject.name}".toString())) {
+                    artifactId = "${artifactName}"
+                } else {
+                    artifactId = "${artifactName}-${project.name}"
+                    artifact sourcesJar
+                    artifact javadocJar
+                }
+
+                pom {
+                    name = projectName
+                    description = projectDescription
+                    inceptionYear = '2019'
+                    url = "https://github.com/burdoto/${artifactName}-${project.name}".toString()
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = "burdoto"
+                            name = "Tobias Burdow"
+                            email = "burdoto@outlook.com"
+                        }
+                    }
+
+                    scm {
+                        connection = "scm:git:git://github.com/burdoto/${projectName}.git".toString()
+                        developerConnection = "scm:git:ssh://github.com/burdoto/${projectName}.git".toString()
+                        url = "https://github.com/burdoto/${projectName}".toString()
+                    }
+                }
+
+                System.out.println("Registered artifact publication: '${group}:${artifactId}:${project.version}'")
+            }
+        }
+    }
+
+    task generateGithubPom(type: GenerateMavenPom) {
+        destination = file("$projectDir/pom.xml")
+        pom = publishing.publications.mavenJava.pom
+    }
+
+    if (!System.getenv().containsKey('JITPACK')) {
+        signing {
+            useGpgCmd()
+            sign publishing.publications.mavenJava
+        }
+    }
+}
+
+nexusStaging {
+    username sonatypeUsername.toString()
+    password sonatypePassword.toString()
+}

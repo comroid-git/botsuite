@@ -1,0 +1,93 @@
+buildscript {
+    repositories.gradlePluginPortal()
+    dependencies.classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.21.1"
+}
+
+apply plugin: 'java-library'
+
+group 'org.comroid'
+version '0.1.0-SNAPSHOT'
+
+apply from: 'gradle/vars.gradle'
+
+def exportedProjects = [
+        ':core',
+        ':catnip',
+        ':discord4j',
+        ':javacord',
+        ':jda'
+]
+
+tasks.findByName('wrapper')?.configure {
+    gradleVersion = '5.2'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+allprojects {
+    tasks.withType(Javadoc) {
+        options {
+            encoding = 'UTF-8'
+            links = [
+                    "https://docs.oracle.com/javase/8/docs/api/",
+                    "https://docs.oracle.com/javaee/7/api/",
+                    "https://mewna.github.io/catnip/docs/",
+                    //"https://www.javadoc.io/doc/com.discord4j/discord4j-core/3.0.9", // broken
+                    "https://docs.javacord.org/api/v/3.0.4/"//,
+                    //"https://ci.dv8tion.net/job/JDA/javadoc/" // broken
+            ]
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    group 'de.kaleidox'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        archiveClassifier = "sources"
+    }
+
+    task javadocJar(type: Jar) {
+        //javadoc
+        from javadoc.destinationDir
+        archiveClassifier = "javadoc"
+    }
+
+    compileJava.options.encoding = 'UTF-8'
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://maven.jetbrains.space/comroid/release"
+            credentials.username "Anonymous.User"
+            credentials.password "anonymous"
+        }
+        jcenter()
+        maven { url 'https://www.jitpack.io' }
+    }
+
+    dependencies {
+        compileOnly 'org.jetbrains:annotations:19.0.0'
+
+        implementation project(':common-util:uniform')
+
+        implementation 'com.google.flogger:flogger:0.5.1'
+
+        testImplementation 'junit:junit:4.12'
+        testImplementation 'org.easymock:easymock:4.0.2'
+        testCompileOnly 'org.codehaus.groovy:groovy:3.0.0-beta-3'
+    }
+}
+/*
+task allJavadoc(type: Javadoc) {
+    source exportedProjects.collect { project(it).sourceSets.main.allJava }
+    classpath = files(exportedProjects.collect { project(it).sourceSets.main.compileClasspath })
+    options.encoding = 'UTF-8'
+    options.destinationDirectory(file("./docs/"))
+}*/
+
+apply from: 'gradle/publishing.gradle'
