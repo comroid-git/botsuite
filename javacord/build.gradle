@@ -2,6 +2,7 @@ version '0.1.0-SNAPSHOT'
 
 dependencies {
     api project(':discord-ux:core')
+    api project(':javacord-utilities')
     implementation project(':common-util:uniform').sourceSets.java8compat.output.classesDirs
 
     compileOnly 'org.javacord:javacord-api:3.0.4'

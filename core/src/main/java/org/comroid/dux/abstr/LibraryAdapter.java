@@ -18,6 +18,8 @@ public interface LibraryAdapter<BASE, SRV extends BASE, TXT extends BASE, USR ex
 
     DiscordTextChannel<TXT> getTextChannelByID(long id);
 
+    CompletableFuture<MSG> send(TXT channel, String message);
+
     DiscordUser<USR> getUserByID(long id);
 
     boolean isHumanUser(USR usr);

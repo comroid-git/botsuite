@@ -1,12 +1,9 @@
 package org.comroid.dux.javacord;
 
-import org.comroid.api.Polyfill;
-import org.comroid.dux.abstr.LibraryAdapter;
-import org.comroid.dux.ui.input.DiscordInputSequence;
+import org.comroid.dux.ui.input.InputSequence;
+import org.comroid.uniform.HeldType;
 import org.comroid.uniform.ValueType;
 import org.javacord.api.DiscordApi;
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
@@ -17,19 +14,17 @@ import java.io.Closeable;
 import java.util.concurrent.CompletableFuture;
 
 public final class JavacordInputSequence {
-    public static final class OfString extends DiscordInputSequence<String, TextChannel, User, Message> {
+    public static final class OfString implements InputSequence<String, User> {
         private final CompletableFuture<String> future = new CompletableFuture<>();
-        private final JavacordAdapter adapter;
+        private final JavacordDUX adapter;
 
         @Override
-        public LibraryAdapter<Object, Object, TextChannel, User, Message> getAdapter() {
-            return Polyfill.uncheckedCast(adapter);
+        public HeldType<String> getResultType() {
+            return ValueType.STRING;
         }
 
-        public OfString(JavacordAdapter javacordAdapter) {
-            super(ValueType.STRING);
-
-            this.adapter = javacordAdapter;
+        public OfString(JavacordDUX javacordDUX) {
+            this.adapter = javacordDUX;
         }
 
         @Override

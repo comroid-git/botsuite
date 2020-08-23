@@ -1,14 +1,15 @@
 package org.comroid.dux.javacord;
 
 import org.comroid.api.Polyfill;
-import org.comroid.dux.DiscordUX;
 import org.comroid.dux.abstr.LibraryAdapter;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordServer;
 import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.adapter.DiscordUser;
-import org.comroid.dux.ui.input.DiscordInputSequence;
+import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
+import org.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
+import org.comroid.mutatio.ref.Reference;
 import org.comroid.uniform.HeldType;
 import org.comroid.uniform.SerializationAdapter;
 import org.comroid.uniform.ValueType;
@@ -22,20 +23,40 @@ import org.javacord.api.entity.message.MessageSet;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
-import org.javacord.api.entity.webhook.Webhook;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
-public final class JavacordAdapter implements LibraryAdapter<DiscordEntity, Server, TextChannel, User, Message> {
+public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, TextChannel, User, Message> {
+    @Contract("_ -> new")
+    public JavacordDisplayable.OfString stringDisplayable(String content) {
+        return new JavacordDisplayable.OfString(this, Reference.constant(content));
+    }
+
+    @Contract("_ -> new")
+    public JavacordDisplayable.OfEmbed embedDisplayable(final Consumer<EmbedBuilder> embedConfigurator) {
+        return new JavacordDisplayable.OfEmbed(this, Reference.provided(() -> {
+            EmbedBuilder embed = DefaultEmbedFactory.create();
+            embedConfigurator.accept(embed);
+            return embed;
+        }));
+    }
+
+    @Contract("_ -> new")
+    public JavacordDisplayable.OfEmbed embedDisplayable(EmbedBuilder embed) {
+        return new JavacordDisplayable.OfEmbed(this, Reference.constant(embed));
+    }
+
     public final DiscordApi api;
     private final Map<Long, DiscordServer<Server>> serverCache = new ConcurrentHashMap<>();
     private final Map<Long, DiscordTextChannel<TextChannel>> textChannelCache = new ConcurrentHashMap<>();
     private final Map<Long, DiscordUser<User>> userCache = new ConcurrentHashMap<>();
     private final Map<Long, DiscordMessage<Message>> messageCache = new ConcurrentHashMap<>();
 
-    public JavacordAdapter(DiscordApi api) {
+    public JavacordDUX(DiscordApi api) {
         this.api = api;
     }
 
@@ -59,6 +80,11 @@ public final class JavacordAdapter implements LibraryAdapter<DiscordEntity, Serv
     public DiscordTextChannel<TextChannel> getTextChannelByID(long id) {
         return textChannelCache.computeIfAbsent(id, k -> new DiscordTextChannel<>(this, id,
                 x -> api.getTextChannelById(id).orElse(null)));
+    }
+
+    @Override
+    public CompletableFuture<Message> send(TextChannel channel, String message) {
+        return channel.sendMessage(message);
     }
 
     @Override
@@ -110,13 +136,16 @@ public final class JavacordAdapter implements LibraryAdapter<DiscordEntity, Serv
     @Override
     public DiscordDisplayable<TextChannel, Message> output(Object display) {
         if (display instanceof EmbedBuilder)
-            return new JavacordDisplayable.OfEmbed(this, (EmbedBuilder) display);
+            return embedDisplayable((EmbedBuilder) display);
+        if (display instanceof String)
+            return stringDisplayable(String.valueOf(display));
 
         return null; // todo
     }
 
+
     @Override
-    public <R> DiscordInputSequence<R, TextChannel, User, Message> input(HeldType<R> resultType) {
+    public <R> InputSequence<R, User> input(HeldType<R> resultType) {
         if (resultType.equals(ValueType.STRING))
             return Polyfill.uncheckedCast(new JavacordInputSequence.OfString(this));
 

@@ -6,9 +6,8 @@ import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordServer;
 import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.adapter.DiscordUser;
-import org.comroid.dux.builder.DiscordForm;
+import org.comroid.dux.form.DiscordForm;
 import org.comroid.dux.model.*;
-import org.comroid.dux.ui.input.DiscordInputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.HeldType;
 
