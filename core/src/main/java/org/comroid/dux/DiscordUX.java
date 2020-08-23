@@ -8,6 +8,7 @@ import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.form.DiscordForm;
 import org.comroid.dux.model.*;
+import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.HeldType;
 
@@ -35,7 +36,7 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
     }
 
     @Override
-    public <R> DiscordInputSequence<R, TXT, USR, MSG> input(HeldType<R> resultType) {
+    public <R> InputSequence<R, USR> input(HeldType<R> resultType) {
         return adapter.input(resultType);
     }
 
