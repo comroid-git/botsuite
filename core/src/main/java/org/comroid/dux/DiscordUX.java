@@ -1,13 +1,15 @@
 package org.comroid.dux;
 
 import org.comroid.api.Polyfill;
+import org.comroid.common.ref.Named;
 import org.comroid.dux.abstr.LibraryAdapter;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordServer;
 import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.form.DiscordForm;
-import org.comroid.dux.model.*;
+import org.comroid.dux.model.ActionGenerator;
+import org.comroid.dux.model.AdapterHolder;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.HeldType;
@@ -38,6 +40,11 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
     @Override
     public <R> InputSequence<R, USR, MSG> input(HeldType<R> resultType) {
         return adapter.input(resultType);
+    }
+
+    @Override
+    public <R extends Enum<R> & Named> InputSequence<R, USR, MSG> enumInput(Class<R> ofEnum, String confirmationEmoji) {
+        return adapter.enumInput(ofEnum, confirmationEmoji);
     }
 
     public DiscordForm<SRV, TXT, USR, MSG> createFormBuilder(TXT inChannel) {

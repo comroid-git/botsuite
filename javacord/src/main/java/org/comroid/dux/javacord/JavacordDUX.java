@@ -1,6 +1,7 @@
 package org.comroid.dux.javacord;
 
 import org.comroid.api.Polyfill;
+import org.comroid.common.ref.Named;
 import org.comroid.dux.abstr.LibraryAdapter;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordServer;
@@ -150,5 +151,10 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
             return Polyfill.uncheckedCast(new JavacordInputSequence.OfString(this));
 
         return null; // todo
+    }
+
+    @Override
+    public <R extends Enum<R> & Named> InputSequence<R, User, Message> enumInput(Class<R> ofEnum, String confirmationEmoji) {
+        return new JavacordInputSequence.OfEnum(ofEnum, confirmationEmoji);
     }
 }
