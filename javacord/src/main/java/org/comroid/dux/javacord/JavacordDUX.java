@@ -7,6 +7,7 @@ import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordServer;
 import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.adapter.DiscordUser;
+import org.comroid.dux.model.EmojiHolder;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
@@ -154,7 +155,7 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
     }
 
     @Override
-    public <R extends Enum<R> & Named> InputSequence<R, User, Message> enumInput(Class<R> ofEnum, String confirmationEmoji) {
-        return new JavacordInputSequence.OfEnum(ofEnum, confirmationEmoji);
+    public <R extends Enum<R> & Named & EmojiHolder> InputSequence<R, User, Message> enumInput(Class<R> ofEnum) {
+        return new JavacordEnumInputSequence(ofEnum);
     }
 }

@@ -10,9 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class DiscordDisplayable<TXT, MSG> implements AdapterHolder<Object, TXT, Object, MSG>, Displayable<TXT, MSG> {
     private final Map<Long, FutureReference<MSG>> alreadySent = new ConcurrentHashMap<>();
 
-    protected abstract CompletableFuture<MSG> sendInto(TXT channel);
+    public abstract CompletableFuture<MSG> sendInto(TXT channel);
 
-    protected abstract CompletableFuture<MSG> updateContent(MSG oldMessage);
+    public abstract CompletableFuture<MSG> updateContent(MSG oldMessage);
 
     @Override
     public final FutureReference<MSG> displayIn(final TXT channel) {

@@ -3,6 +3,7 @@ package org.comroid.dux.javacord;
 import org.comroid.api.Junction;
 import org.comroid.common.ref.Named;
 import org.comroid.dux.ui.input.InputSequence;
+import org.comroid.mutatio.span.Span;
 import org.comroid.uniform.HeldType;
 import org.comroid.uniform.ValueType;
 import org.javacord.api.DiscordApi;
@@ -63,91 +64,6 @@ public final class JavacordInputSequence {
             }
 
             return new OnceListener(adapter.api, targetUser == null ? -1 : targetUser.getId()).future;
-        }
-    }
-
-    public static final class OfEnum<R extends Enum<R> & Named> implements InputSequence<R, User, Message> {
-        private final Class<R> enumClass;
-        private final R[] values;
-        private final Junction<String, R> converter = Junction.ofString(name -> {
-            for (R value : getValues()) {
-                if (value.getName().equalsIgnoreCase(name))
-                    return value;
-            }
-            return null;
-        });
-        private final HeldType<R> heldType = new HeldType<R>() {
-
-            @Override
-            public Junction<String, R> getConverter() {
-                return converter;
-            }
-
-            @Override
-            public String getName() {
-                return enumClass.getSimpleName();
-            }
-
-            @Override
-            public <T> T convert(R value, HeldType<T> toType) {
-                if (toType.equals(ValueType.STRING))
-                    //noinspection unchecked
-                    return (T) value.getName();
-                throw new UnsupportedOperationException();
-            }
-        };
-        private final String confirmationEmoji;
-
-        public R[] getValues() {
-            return values;
-        }
-
-        @Override
-        public HeldType<R> getResultType() {
-            return heldType;
-        }
-
-        public OfEnum(Class<R> ofEnum, String confirmationEmoji) {
-            this.enumClass = ofEnum;
-            this.values = enumClass.getEnumConstants();
-            this.confirmationEmoji = confirmationEmoji;
-        }
-
-        @Override
-        public CompletableFuture<R> listen(@NotNull CompletableFuture<?> abortionFuture, User targetUser, Message displayMessage) {
-            class EnumConstantsListener implements ReactionAddListener, ReactionRemoveListener, ReactionRemoveAllListener, Closeable {
-                public final CompletableFuture<R> future = new CompletableFuture<>();
-                private final Message displayMessage;
-                private final long targetUserId;
-
-                public EnumConstantsListener(Message displayMessage, long targetUserId) {
-                    this.displayMessage = displayMessage;
-                    this.targetUserId = targetUserId;
-                }
-
-                @Override
-                public void onReactionAdd(ReactionAddEvent event) {
-                    if (targetUserId == -1 || event.getUser().getId() == targetUserId)
-
-                }
-
-                @Override
-                public void onReactionRemoveAll(ReactionRemoveAllEvent event) {
-                }
-
-                @Override
-                public void onReactionRemove(ReactionRemoveEvent event) {
-                    if (targetUserId == -1 || event.getUser().getId() == targetUserId)
-                }
-
-                @Override
-                public void close() {
-                    if (!future.isDone())
-                        future.completeExceptionally(new RuntimeException("Input Aborted"));
-                }
-            }
-
-            return new EnumConstantsListener(displayMessage, targetUser == null ? -1 : targetUser.getId()).future;
         }
     }
 }

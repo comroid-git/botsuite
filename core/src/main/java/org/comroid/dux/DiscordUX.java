@@ -10,6 +10,7 @@ import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.form.DiscordForm;
 import org.comroid.dux.model.ActionGenerator;
 import org.comroid.dux.model.AdapterHolder;
+import org.comroid.dux.model.EmojiHolder;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.HeldType;
@@ -43,7 +44,7 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
     }
 
     @Override
-    public <R extends Enum<R> & Named> InputSequence<R, USR, MSG> enumInput(Class<R> ofEnum, String confirmationEmoji) {
+    public <R extends Enum<R> & Named & EmojiHolder> InputSequence<R, USR, MSG> enumInput(Class<R> ofEnum, String confirmationEmoji) {
         return adapter.enumInput(ofEnum, confirmationEmoji);
     }
 

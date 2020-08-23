@@ -34,7 +34,7 @@ public final class JavacordDisplayable {
         }
 
         @Override
-        protected CompletableFuture<Message> sendInto(TextChannel channel) {
+        public CompletableFuture<Message> sendInto(TextChannel channel) {
             return stringRef.ifPresentMapOrElseGet(
                     channel::sendMessage,
                     () -> Polyfill.failedFuture(new RuntimeException("Could not find string"))
@@ -42,7 +42,7 @@ public final class JavacordDisplayable {
         }
 
         @Override
-        protected CompletableFuture<Message> updateContent(Message oldMessage) {
+        public CompletableFuture<Message> updateContent(Message oldMessage) {
             return stringRef.process()
                     .map(oldMessage::edit)
                     .map(f -> f.thenCompose(n -> oldMessage.getLatestInstance()))
@@ -59,7 +59,7 @@ public final class JavacordDisplayable {
         }
 
         @Override
-        protected CompletableFuture<Message> sendInto(TextChannel channel) {
+        public CompletableFuture<Message> sendInto(TextChannel channel) {
             return embedRef.ifPresentMapOrElseGet(
                     channel::sendMessage,
                     () -> Polyfill.failedFuture(new RuntimeException("Could not find embed"))
@@ -67,7 +67,7 @@ public final class JavacordDisplayable {
         }
 
         @Override
-        protected CompletableFuture<Message> updateContent(Message oldMessage) {
+        public CompletableFuture<Message> updateContent(Message oldMessage) {
             return embedRef.process()
                     .map(oldMessage::edit)
                     .map(f -> f.thenCompose(n -> oldMessage.getLatestInstance()))
