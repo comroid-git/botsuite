@@ -36,7 +36,7 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
     }
 
     @Override
-    public <R> InputSequence<R, USR> input(HeldType<R> resultType) {
+    public <R> InputSequence<R, USR, MSG> input(HeldType<R> resultType) {
         return adapter.input(resultType);
     }
 

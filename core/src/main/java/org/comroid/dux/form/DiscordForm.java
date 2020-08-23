@@ -34,7 +34,7 @@ public class DiscordForm<SRV, TXT, USR, MSG> {
     public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(
             String key,
             DiscordDisplayable<TXT, MSG> displayable,
-            InputSequence<R, USR> inputSequence
+            InputSequence<R, USR, MSG> inputSequence
     ) {
         return addStage(key, displayable, inputSequence, any -> null);
     }
@@ -42,7 +42,7 @@ public class DiscordForm<SRV, TXT, USR, MSG> {
     public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(
             String key,
             DiscordDisplayable<TXT, MSG> displayable,
-            InputSequence<R, USR> inputSequence,
+            InputSequence<R, USR, MSG> inputSequence,
             Function<R, @Nullable String> nextKeyResolver
     ) {
         stages.add(new FormStage<>(key, displayable, inputSequence, nextKeyResolver));
@@ -78,7 +78,7 @@ public class DiscordForm<SRV, TXT, USR, MSG> {
             return findStage(thisKey).ifPresentMapOrElseGet(
                     stage -> stage.displayable.displayIn(inChannel)
                             .ifPresentMapOrElseGet(
-                                    msg -> stage.inputSequence.listen(targetUser),
+                                    msg -> stage.inputSequence.listen(targetUser, msg),
                                     () -> Polyfill.failedFuture(new RuntimeException("Could not show displayable")))
                             .thenApplyAsync(result -> {
                                 if (result instanceof Iterable) {

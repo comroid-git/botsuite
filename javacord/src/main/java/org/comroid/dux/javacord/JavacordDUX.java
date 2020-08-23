@@ -145,7 +145,7 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
 
 
     @Override
-    public <R> InputSequence<R, User> input(HeldType<R> resultType) {
+    public <R> InputSequence<R, User, Message> input(HeldType<R> resultType) {
         if (resultType.equals(ValueType.STRING))
             return Polyfill.uncheckedCast(new JavacordInputSequence.OfString(this));
 

@@ -14,7 +14,7 @@ import java.io.Closeable;
 import java.util.concurrent.CompletableFuture;
 
 public final class JavacordInputSequence {
-    public static final class OfString implements InputSequence<String, User> {
+    public static final class OfString implements InputSequence<String, User, MSG> {
         private final CompletableFuture<String> future = new CompletableFuture<>();
         private final JavacordDUX adapter;
 
@@ -28,7 +28,7 @@ public final class JavacordInputSequence {
         }
 
         @Override
-        public CompletableFuture<String> listen(@NotNull CompletableFuture<?> abortionFuture, @Nullable User targetUser) {
+        public CompletableFuture<String> listen(@NotNull CompletableFuture<?> abortionFuture, @Nullable User targetUser, MSG displayMessage) {
             class OnceListener implements MessageCreateListener, Closeable {
                 public final CompletableFuture<String> future = new CompletableFuture<>();
                 private final long targetUserId;

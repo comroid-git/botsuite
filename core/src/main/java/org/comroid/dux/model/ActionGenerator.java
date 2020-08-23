@@ -7,5 +7,5 @@ import org.comroid.uniform.HeldType;
 public interface ActionGenerator<TXT, USR, MSG> {
     DiscordDisplayable<TXT, MSG> output(Object display);
 
-    <R> InputSequence<R, USR> input(HeldType<R> resultType);
+    <R> InputSequence<R, USR, MSG> input(HeldType<R> resultType);
 }
