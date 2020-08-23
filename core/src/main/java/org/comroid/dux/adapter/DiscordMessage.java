@@ -1,4 +1,4 @@
-package org.comroid.dux.model;
+package org.comroid.dux.adapter;
 
 import org.comroid.dux.abstr.LibraryAdapter;
 import org.comroid.mutatio.ref.Reference;

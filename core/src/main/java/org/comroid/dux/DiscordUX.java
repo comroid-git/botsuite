@@ -2,29 +2,46 @@ package org.comroid.dux;
 
 import org.comroid.api.Polyfill;
 import org.comroid.dux.abstr.LibraryAdapter;
-import org.comroid.dux.builder.FormBuilder;
-import org.comroid.dux.model.DiscordMessage;
-import org.comroid.dux.model.DiscordServer;
-import org.comroid.dux.model.DiscordTextChannel;
-import org.comroid.dux.model.DiscordUser;
+import org.comroid.dux.adapter.DiscordMessage;
+import org.comroid.dux.adapter.DiscordServer;
+import org.comroid.dux.adapter.DiscordTextChannel;
+import org.comroid.dux.adapter.DiscordUser;
+import org.comroid.dux.builder.DiscordForm;
+import org.comroid.dux.model.*;
+import org.comroid.dux.ui.input.DiscordInputSequence;
+import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.HeldType;
 
-public final class DiscordUX<SRV, TXT, USR, MSG> {
+public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, TXT, USR, MSG>, ActionGenerator<TXT, USR, MSG> {
     private final LibraryAdapter<Object, SRV, TXT, USR, MSG> adapter;
+
+    @Override
+    public LibraryAdapter<Object, SRV, TXT, USR, MSG> getAdapter() {
+        return adapter;
+    }
 
     private DiscordUX(LibraryAdapter<?, ?, ?, ?, ?> adapter) {
         this.adapter = Polyfill.uncheckedCast(adapter);
     }
 
-    public static <BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE>
-    DiscordUX<SRV, TXT, USR, MSG> create(
+    public static <BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE> DiscordUX<SRV, TXT, USR, MSG> create(
             LibraryAdapter<BASE, SRV, TXT, USR, MSG> adapter
     ) {
         return new DiscordUX<>(adapter);
     }
 
-    public <R> FormBuilder<SRV, TXT, USR, MSG, R> createFormBuilder(TXT inChannel, HeldType<R> resultType) {
-        return new FormBuilder<>(adapter, convertTXT(inChannel), resultType);
+    @Override
+    public DiscordDisplayable<TXT, MSG> output(Object display) {
+        return adapter.output(display);
+    }
+
+    @Override
+    public <R> DiscordInputSequence<R, TXT, USR, MSG> input(HeldType<R> resultType) {
+        return adapter.input(resultType);
+    }
+
+    public DiscordForm<SRV, TXT, USR, MSG> createFormBuilder(TXT inChannel) {
+        return new DiscordForm<>(adapter, convertTXT(inChannel));
     }
 
     private DiscordServer<SRV> convertSRV(SRV srv) {
