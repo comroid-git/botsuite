@@ -49,6 +49,7 @@ public final class JavacordInputSequence {
 
                 @Override
                 public void onMessageCreate(MessageCreateEvent event) {
+                    if (event.getMessageAuthor().isYourself()) return;
                     if (targetUserId == -1 || event.getMessageAuthor().getId() == targetUserId)
                         future.complete(event.getReadableMessageContent());
                 }
@@ -94,6 +95,7 @@ public final class JavacordInputSequence {
 
                 @Override
                 public void onReactionAdd(ReactionAddEvent event) {
+                    if (event.getUser().isYourself()) return;
                     if (targetUserId == -1 || event.getUser().getId() == targetUserId)
                         event.getEmoji()
                                 .asUnicodeEmoji()

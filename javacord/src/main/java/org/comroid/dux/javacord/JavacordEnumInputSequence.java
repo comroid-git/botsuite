@@ -94,6 +94,7 @@ public final class JavacordEnumInputSequence {
 
             @Override
             public void onReactionAdd(ReactionAddEvent event) {
+                if (event.getUser().isYourself()) return;
                 if (targetUserId != -1 && event.getUser().getId() != targetUserId)
                     return;
                 
