@@ -7,7 +7,6 @@ import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordServer;
 import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.adapter.DiscordUser;
-import org.comroid.dux.model.EmojiHolder;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
@@ -33,6 +32,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, TextChannel, User, Message> {
+    public final DiscordApi api;
+    private final Map<Long, DiscordServer<Server>> serverCache = new ConcurrentHashMap<>();
+    private final Map<Long, DiscordTextChannel<TextChannel>> textChannelCache = new ConcurrentHashMap<>();
+    private final Map<Long, DiscordUser<User>> userCache = new ConcurrentHashMap<>();
+    private final Map<Long, DiscordMessage<Message>> messageCache = new ConcurrentHashMap<>();
+
+    @Override
+    public SerializationAdapter<?, ?, ?> getSerializationAdapter() {
+        return JacksonJSONAdapter.instance;
+    }
+    public JavacordDUX(DiscordApi api) {
+        this.api = api;
+    }
+
     @Contract("_ -> new")
     public JavacordDisplayable.OfString stringDisplayable(String content) {
         return new JavacordDisplayable.OfString(this, Reference.constant(content));
@@ -50,21 +63,6 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
     @Contract("_ -> new")
     public JavacordDisplayable.OfEmbed embedDisplayable(EmbedBuilder embed) {
         return new JavacordDisplayable.OfEmbed(this, Reference.constant(embed));
-    }
-
-    public final DiscordApi api;
-    private final Map<Long, DiscordServer<Server>> serverCache = new ConcurrentHashMap<>();
-    private final Map<Long, DiscordTextChannel<TextChannel>> textChannelCache = new ConcurrentHashMap<>();
-    private final Map<Long, DiscordUser<User>> userCache = new ConcurrentHashMap<>();
-    private final Map<Long, DiscordMessage<Message>> messageCache = new ConcurrentHashMap<>();
-
-    public JavacordDUX(DiscordApi api) {
-        this.api = api;
-    }
-
-    @Override
-    public SerializationAdapter<?, ?, ?> getSerializationAdapter() {
-        return JacksonJSONAdapter.instance;
     }
 
     @Override
@@ -150,8 +148,10 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
     public <R> InputSequence<R, User, Message> input(HeldType<R> resultType) {
         if (resultType.equals(ValueType.STRING))
             return Polyfill.uncheckedCast(new JavacordInputSequence.OfString(this));
+        if (resultType.equals(ValueType.BOOLEAN))
+            return Polyfill.uncheckedCast(new JavacordInputSequence.OfBoolean(this));
 
-        return null; // todo
+        throw new UnsupportedOperationException("Unsupported result type: " + resultType.getName());
     }
 
     @Override
