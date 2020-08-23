@@ -44,8 +44,8 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
     }
 
     @Override
-    public <R extends Enum<R> & Named & EmojiHolder> InputSequence<R, USR, MSG> enumInput(Class<R> ofEnum, String confirmationEmoji) {
-        return adapter.enumInput(ofEnum, confirmationEmoji);
+    public <R extends Enum<R> & Named> InputSequence<R, USR, MSG> enumInput(Class<R> ofEnum) {
+        return adapter.enumInput(ofEnum);
     }
 
     public DiscordForm<SRV, TXT, USR, MSG> createFormBuilder(TXT inChannel) {

@@ -10,9 +10,5 @@ public interface ActionGenerator<TXT, USR, MSG> {
 
     <R> InputSequence<R, USR, MSG> input(HeldType<R> resultType);
 
-    default<R extends Enum<R> & Named & EmojiHolder> InputSequence<R, USR, MSG> enumInput(Class<R> ofEnum) {
-        return enumInput(ofEnum, "✅");
-    }
-
-    <R extends Enum<R> & Named & EmojiHolder> InputSequence<R, USR, MSG> enumInput(Class<R> ofEnum, String confirmationEmoji);
+    <R extends Enum<R> & Named> InputSequence<R, USR, MSG> enumInput(Class<R> ofEnum);
 }

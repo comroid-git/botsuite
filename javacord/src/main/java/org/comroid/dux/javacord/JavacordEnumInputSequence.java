@@ -25,7 +25,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 public final class JavacordEnumInputSequence {
-    public static final class SingleYield<R extends Enum<R> & Named & EmojiHolder> implements InputSequence<R, User, Message> {
+    public static final class SingleYield<R extends Enum<R> & Named> implements InputSequence<R, User, Message> {
     private final Class<R> enumClass;
     private final R[] values;
     private final Junction<String, R> converter = Junction.ofString(name -> {
@@ -71,7 +71,7 @@ public final class JavacordEnumInputSequence {
     
     private Processor<R> findValueByEmoji(String emoji) {
         return Stream.of(values)
-                .filter(r -> r.getPrintableEmoji().equals(emoji))
+                .filter(r -> r.getAlternateFormattedName().equals(emoji))
                 .findAny()
                 .map(Processor::ofConstant)
                 .orElseGet(Processor::empty);
@@ -88,7 +88,7 @@ public final class JavacordEnumInputSequence {
                 this.targetUserId = targetUserId;
 
                 for (R value : values)
-                    displayMessage.addReaction(value.getPrintableEmoji());
+                    displayMessage.addReaction(value.getAlternateFormattedName());
                 future.thenRun(displayMessage.addReactionAddListener(this)::remove);
             }
 
