@@ -2,12 +2,12 @@ package org.comroid.dux.form;
 
 import org.comroid.common.ref.Named;
 import org.comroid.dux.DiscordUX;
-import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.io.CombinedAction;
 import org.comroid.dux.ui.io.EnumSelection;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.mutatio.span.Span;
+import org.comroid.uniform.HeldType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
@@ -24,18 +24,27 @@ public final class DiscordForm<SRV, TXT, USR, MSG> {
     public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(
             String key,
             Object label,
-            InputSequence<R, USR, MSG> inputSequence
+            HeldType<R> resultType
     ) {
-        return addStage(key, dux.wrapIntoDisplayable(label), inputSequence, any -> null);
+        return addStage(key, dux.wrapIntoDisplayable(label), resultType, any -> null);
     }
 
     public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(
             String key,
             Object label,
+            HeldType<R> resultType,
+            Function<R, @Nullable String> nextKeyResolver
+    ) {
+        return addStage(key, dux.wrapIntoDisplayable(label), dux.input(resultType), nextKeyResolver);
+    }
+
+    public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(
+            String key,
+            DiscordDisplayable<TXT, MSG> displayable,
             InputSequence<R, USR, MSG> inputSequence,
             Function<R, @Nullable String> nextKeyResolver
     ) {
-        return addStage(new FormStage<>(key, dux.wrapIntoDisplayable(label), inputSequence, nextKeyResolver));
+        return addStage(new FormStage<>(key, displayable, inputSequence, nextKeyResolver));
     }
 
     public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(CombinedAction<R, TXT, USR, MSG> stage) {
