@@ -7,7 +7,6 @@ import org.comroid.dux.model.AdapterHolder;
 import org.comroid.dux.ui.input.EnumInputSequence;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.input.StandardInputSequence;
-import org.comroid.dux.ui.io.EnumSelection;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.HeldType;
 import org.comroid.uniform.ValueType;
@@ -66,5 +65,12 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
 
     public DiscordMessage<MSG> convertMSG(MSG msg) {
         return adapter.getMessageByID(adapter.getChannelOfMessage(msg).getID(), adapter.getID(msg));
+    }
+
+    public DiscordDisplayable<TXT, MSG> wrapIntoDisplayable(Object label) {
+        if (label instanceof DiscordDisplayable)
+            //noinspection unchecked
+            return (DiscordDisplayable<TXT, MSG>) label;
+        return getAdapter().wrapIntoDisplayable(label);
     }
 }

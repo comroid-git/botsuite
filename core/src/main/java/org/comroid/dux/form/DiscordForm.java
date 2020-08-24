@@ -23,19 +23,19 @@ public final class DiscordForm<SRV, TXT, USR, MSG> {
 
     public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(
             String key,
-            DiscordDisplayable<TXT, MSG> displayable,
+            Object label,
             InputSequence<R, USR, MSG> inputSequence
     ) {
-        return addStage(key, displayable, inputSequence, any -> null);
+        return addStage(key, dux.wrapIntoDisplayable(label), inputSequence, any -> null);
     }
 
     public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(
             String key,
-            DiscordDisplayable<TXT, MSG> displayable,
+            Object label,
             InputSequence<R, USR, MSG> inputSequence,
             Function<R, @Nullable String> nextKeyResolver
     ) {
-        return addStage(new FormStage<>(key, displayable, inputSequence, nextKeyResolver));
+        return addStage(new FormStage<>(key, dux.wrapIntoDisplayable(label), inputSequence, nextKeyResolver));
     }
 
     public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(CombinedAction<R, TXT, USR, MSG> stage) {
