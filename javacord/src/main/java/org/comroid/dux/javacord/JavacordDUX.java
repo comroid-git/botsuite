@@ -2,7 +2,7 @@ package org.comroid.dux.javacord;
 
 import org.comroid.api.Polyfill;
 import org.comroid.common.ref.Named;
-import org.comroid.dux.abstr.LibraryAdapter;
+import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordServer;
 import org.comroid.dux.adapter.DiscordTextChannel;
@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, TextChannel, User, Message> {
     public final DiscordApi api;
@@ -112,6 +113,17 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
     @Override
     public String getMessageContent(Message message) {
         return message.getReadableContent();
+    }
+
+    @Override
+    public CompletableFuture<?> addReactionToMessage(Message message, String emoji) {
+        return message.getServer()
+                .map(srv -> srv.getCustomEmojis().stream())
+                .orElseGet(Stream::empty)
+                .filter(custom -> custom.getMentionTag().equals(emoji))
+                .findAny()
+                .map(message::addReaction)
+                .orElseGet(() -> message.addReaction(emoji));
     }
 
     @Override

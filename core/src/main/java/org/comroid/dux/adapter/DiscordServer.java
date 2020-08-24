@@ -1,11 +1,10 @@
 package org.comroid.dux.adapter;
 
-import org.comroid.dux.abstr.LibraryAdapter;
 import org.comroid.mutatio.ref.Reference;
 
 import java.util.function.LongFunction;
 
-public final class DiscordServer<SRV> {
+public final class DiscordServer<SRV> implements DiscordEntity {
     private final LibraryAdapter<? super SRV, SRV, ?, ?, ?> adapter;
     private final long id;
     private final Reference<SRV> reference;

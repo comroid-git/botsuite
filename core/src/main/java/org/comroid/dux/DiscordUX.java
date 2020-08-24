@@ -2,7 +2,7 @@ package org.comroid.dux;
 
 import org.comroid.api.Polyfill;
 import org.comroid.common.ref.Named;
-import org.comroid.dux.abstr.LibraryAdapter;
+import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordServer;
 import org.comroid.dux.adapter.DiscordTextChannel;
@@ -10,7 +10,6 @@ import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.form.DiscordForm;
 import org.comroid.dux.model.ActionGenerator;
 import org.comroid.dux.model.AdapterHolder;
-import org.comroid.dux.model.EmojiHolder;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.HeldType;

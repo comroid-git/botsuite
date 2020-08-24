@@ -1,11 +1,10 @@
 package org.comroid.dux.adapter;
 
-import org.comroid.dux.abstr.LibraryAdapter;
 import org.comroid.mutatio.ref.Reference;
 
 import java.util.function.LongFunction;
 
-public final class DiscordTextChannel<TXT> {
+public final class DiscordTextChannel<TXT> implements DiscordEntity {
     private final LibraryAdapter<? super TXT, ?, TXT, ?, ?> adapter;
     private final long id;
     private final Reference<TXT> reference;

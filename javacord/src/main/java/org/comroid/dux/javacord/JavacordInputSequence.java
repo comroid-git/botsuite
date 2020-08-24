@@ -1,5 +1,7 @@
 package org.comroid.dux.javacord;
 
+import org.comroid.dux.adapter.DiscordMessage;
+import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.uniform.HeldType;
 import org.comroid.uniform.ValueType;
@@ -11,7 +13,6 @@ import org.javacord.api.event.message.reaction.ReactionAddEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.javacord.api.listener.message.reaction.ReactionAddListener;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Closeable;
 import java.util.concurrent.CompletableFuture;
@@ -30,7 +31,7 @@ public final class JavacordInputSequence {
         }
 
         @Override
-        public CompletableFuture<String> listen(@NotNull CompletableFuture<?> abortionFuture, @Nullable User targetUser, Message displayMessage) {
+        public CompletableFuture<String> listen(@NotNull CompletableFuture<?> abortionFuture, DiscordUser<User> targetUser, DiscordMessage<Message> displayMessage) {
             class OnceListener implements MessageCreateListener, Closeable {
                 public final CompletableFuture<String> future = new CompletableFuture<>();
                 private final long targetUserId;
@@ -74,7 +75,7 @@ public final class JavacordInputSequence {
         }
 
         @Override
-        public CompletableFuture<Boolean> listen(@NotNull CompletableFuture<?> abortionFuture, User targetUser, Message displayMessage) {
+        public CompletableFuture<Boolean> listen(@NotNull CompletableFuture<?> abortionFuture, DiscordUser<User> targetUser, DiscordMessage<Message> displayMessage) {
             class YesNoListener implements ReactionAddListener, Closeable {
                 private final CompletableFuture<Boolean> future = new CompletableFuture<>();
                 private final long targetUserId;

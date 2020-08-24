@@ -1,4 +1,4 @@
-package org.comroid.dux.abstr;
+package org.comroid.dux.adapter;
 
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordServer;
@@ -27,6 +27,8 @@ public interface LibraryAdapter<BASE, SRV extends BASE, TXT extends BASE, USR ex
     DiscordMessage<MSG> getMessageByID(long chlID, long msgID);
 
     String getMessageContent(MSG message);
+
+    CompletableFuture<?> addReactionToMessage(MSG msg, String emoji);
 
     boolean isMostRecentMessage(MSG msg);
 

@@ -1,11 +1,10 @@
 package org.comroid.dux.adapter;
 
-import org.comroid.dux.abstr.LibraryAdapter;
 import org.comroid.mutatio.ref.Reference;
 
 import java.util.function.LongFunction;
 
-public final class DiscordUser<USR> {
+public final class DiscordUser<USR> implements DiscordEntity {
     private final LibraryAdapter<? super USR, ?, ?, USR, ?> adapter;
     private final long id;
     private final Reference<USR> reference;

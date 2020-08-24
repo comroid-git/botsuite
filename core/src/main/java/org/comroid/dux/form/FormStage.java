@@ -1,6 +1,8 @@
 package org.comroid.dux.form;
 
-import org.comroid.dux.abstr.LibraryAdapter;
+import org.comroid.dux.adapter.LibraryAdapter;
+import org.comroid.dux.adapter.DiscordMessage;
+import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.io.CombinedAction;
 import org.comroid.dux.ui.output.DiscordDisplayable;
@@ -28,7 +30,7 @@ public final class FormStage<R, TXT, USR, MSG> extends CombinedAction<R, TXT, US
     }
 
     @Override
-    public CompletableFuture<R> listen(@NotNull CompletableFuture<?> abortionFuture, USR targetUser, MSG displayMessage) {
+    public CompletableFuture<R> listen(@NotNull CompletableFuture<?> abortionFuture, DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
         return inputSequence.listen(abortionFuture, targetUser, displayMessage);
     }
 

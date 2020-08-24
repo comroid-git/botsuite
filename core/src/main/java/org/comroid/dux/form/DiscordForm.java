@@ -2,7 +2,7 @@ package org.comroid.dux.form;
 
 import org.comroid.annotations.Blocking;
 import org.comroid.api.Polyfill;
-import org.comroid.dux.abstr.LibraryAdapter;
+import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
