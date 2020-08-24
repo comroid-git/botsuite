@@ -1,13 +1,15 @@
 package org.comroid.dux.adapter;
 
-import org.comroid.dux.model.ActionGenerator;
+import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.SerializationAdapter;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-public interface LibraryAdapter<BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE> extends ActionGenerator<TXT, USR, MSG> {
+public interface LibraryAdapter<BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE> {
     SerializationAdapter<?,?,?> getSerializationAdapter();
+
+    DiscordDisplayable<TXT,MSG> wrapIntoDisplayable(Object display);
 
     long getID(BASE of);
 

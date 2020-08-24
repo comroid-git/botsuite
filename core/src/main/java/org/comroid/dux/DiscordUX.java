@@ -1,20 +1,19 @@
 package org.comroid.dux;
 
-import org.comroid.api.Polyfill;
 import org.comroid.common.ref.Named;
-import org.comroid.dux.adapter.LibraryAdapter;
-import org.comroid.dux.adapter.DiscordMessage;
-import org.comroid.dux.adapter.DiscordServer;
-import org.comroid.dux.adapter.DiscordTextChannel;
-import org.comroid.dux.adapter.DiscordUser;
+import org.comroid.dux.adapter.*;
 import org.comroid.dux.form.DiscordForm;
-import org.comroid.dux.model.ActionGenerator;
 import org.comroid.dux.model.AdapterHolder;
+import org.comroid.dux.ui.input.EnumInputSequence;
 import org.comroid.dux.ui.input.InputSequence;
+import org.comroid.dux.ui.input.StandardInputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.HeldType;
+import org.comroid.uniform.ValueType;
 
-public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, TXT, USR, MSG>, ActionGenerator<TXT, USR, MSG> {
+import static org.comroid.api.Polyfill.uncheckedCast;
+
+public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, TXT, USR, MSG> {
     private final LibraryAdapter<Object, SRV, TXT, USR, MSG> adapter;
 
     @Override
@@ -23,7 +22,7 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
     }
 
     private DiscordUX(LibraryAdapter<?, ?, ?, ?, ?> adapter) {
-        this.adapter = Polyfill.uncheckedCast(adapter);
+        this.adapter = uncheckedCast(adapter);
     }
 
     public static <BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE> DiscordUX<SRV, TXT, USR, MSG> create(
@@ -32,19 +31,26 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
         return new DiscordUX<>(adapter);
     }
 
-    @Override
     public DiscordDisplayable<TXT, MSG> output(Object display) {
-        return adapter.output(display);
+        return adapter.wrapIntoDisplayable(display);
     }
 
-    @Override
     public <R> InputSequence<R, USR, MSG> input(HeldType<R> resultType) {
-        return adapter.input(resultType);
+        if (resultType.equals(ValueType.STRING))
+            return uncheckedCast(new StandardInputSequence.OfString<>(this));
+        if (resultType.equals(ValueType.BOOLEAN))
+            return uncheckedCast(new StandardInputSequence.OfBoolean<>(this));
+        throw new UnsupportedOperationException(String.format("Unrecognized result type: %s", resultType));
     }
 
-    @Override
     public <R extends Enum<R> & Named> InputSequence<R, USR, MSG> enumInput(Class<R> ofEnum) {
-        return adapter.enumInput(ofEnum);
+        return enumInput(true, ofEnum);
+    }
+
+    public <R extends Enum<R> & Named> InputSequence<R, USR, MSG> enumInput(boolean singleYield, Class<R> ofEnum) {
+        return singleYield
+                ? new EnumInputSequence.SingleYield<>(ofEnum)
+                : null; //todo
     }
 
     public DiscordForm<SRV, TXT, USR, MSG> createFormBuilder(TXT inChannel) {

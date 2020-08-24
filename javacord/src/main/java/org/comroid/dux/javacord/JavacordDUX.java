@@ -1,17 +1,13 @@
 package org.comroid.dux.javacord;
 
-import org.comroid.api.Polyfill;
 import org.comroid.dux.adapter.*;
-import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
 import org.comroid.mutatio.pipe.BiPipe;
 import org.comroid.mutatio.ref.Reference;
 import org.comroid.mutatio.ref.ReferenceIndex;
 import org.comroid.mutatio.span.Span;
-import org.comroid.uniform.HeldType;
 import org.comroid.uniform.SerializationAdapter;
-import org.comroid.uniform.ValueType;
 import org.comroid.uniform.adapter.json.jackson.JacksonJSONAdapter;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.DiscordEntity;
@@ -50,6 +46,15 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
 
     public JavacordDUX(DiscordApi api) {
         this.api = api;
+    }
+
+    @Override
+    public DiscordDisplayable<TextChannel, Message> wrapIntoDisplayable(Object display) {
+        if (display instanceof String)
+            return new JavacordDisplayable.OfString(this, Reference.constant((String) display));
+        if (display instanceof EmbedBuilder)
+            return new JavacordDisplayable.OfEmbed(this, Reference.constant((EmbedBuilder) display));
+        throw new UnsupportedOperationException(String.format("Unrecognized display information: %s", display));
     }
 
     @Contract("_ -> new")
@@ -193,26 +198,5 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
     @Override
     public DiscordTextChannel<TextChannel> getChannelOfMessage(Message message) {
         return getTextChannelByID(message.getChannel().getId());
-    }
-
-    @Override
-    public DiscordDisplayable<TextChannel, Message> output(Object display) {
-        if (display instanceof EmbedBuilder)
-            return embedDisplayable((EmbedBuilder) display);
-        if (display instanceof String)
-            return stringDisplayable(String.valueOf(display));
-
-        return null; // todo
-    }
-
-
-    @Override
-    public <R> InputSequence<R, User, Message> input(HeldType<R> resultType) {
-        if (resultType.equals(ValueType.STRING))
-            return Polyfill.uncheckedCast(new JavacordInputSequence.OfString(this));
-        if (resultType.equals(ValueType.BOOLEAN))
-            return Polyfill.uncheckedCast(new JavacordInputSequence.OfBoolean(this));
-
-        throw new UnsupportedOperationException("Unsupported result type: " + resultType.getName());
     }
 }
