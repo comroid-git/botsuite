@@ -1,5 +1,6 @@
 package org.comroid.dux.form;
 
+import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
@@ -47,12 +48,12 @@ public final class FormStage<R, TXT, USR, MSG> extends CombinedAction<R, TXT, US
     }
 
     @Override
-    public CompletableFuture<MSG> sendInto(TXT channel) {
+    public CompletableFuture<MSG> sendInto(DiscordTextChannel<TXT> channel) {
         return displayable.sendInto(channel);
     }
 
     @Override
-    public CompletableFuture<MSG> updateContent(MSG oldMessage) {
+    public CompletableFuture<MSG> updateContent(DiscordMessage<MSG> oldMessage) {
         return displayable.updateContent(oldMessage);
     }
 }

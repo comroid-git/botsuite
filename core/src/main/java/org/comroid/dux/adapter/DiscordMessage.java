@@ -3,6 +3,7 @@ package org.comroid.dux.adapter;
 import org.comroid.mutatio.ref.Reference;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.function.LongFunction;
 
 public final class DiscordMessage<MSG> implements DiscordEntity {
@@ -13,6 +14,11 @@ public final class DiscordMessage<MSG> implements DiscordEntity {
     @Override
     public long getID() {
         return id;
+    }
+
+    @Override
+    public Reference<MSG> getParentReference() {
+        return reference;
     }
 
     public String getContent() {
@@ -27,5 +33,9 @@ public final class DiscordMessage<MSG> implements DiscordEntity {
 
     public CompletableFuture<?> addReaction(String emoji) {
         return reference.into(msg -> adapter.addReactionToMessage(msg, emoji));
+    }
+
+    public Runnable listenForReactions(BiConsumer<Long, String> handler) {
+        return reference.into(msg -> adapter.listenForReactions(msg, handler));
     }
 }

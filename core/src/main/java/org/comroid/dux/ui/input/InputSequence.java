@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 public interface InputSequence<R, USR, MSG> {
     HeldType<R> getResultType();
 
-    default CompletableFuture<R> listen(USR targetUser, MSG displayMessage) {
+    default CompletableFuture<R> listen(DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
         return listen(new CompletableFuture<>(), targetUser, displayMessage);
     }
 

@@ -48,22 +48,22 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
     }
 
     public DiscordForm<SRV, TXT, USR, MSG> createFormBuilder(TXT inChannel) {
-        return new DiscordForm<>(adapter, convertTXT(inChannel));
+        return new DiscordForm<>(this, convertTXT(inChannel));
     }
 
-    private DiscordServer<SRV> convertSRV(SRV srv) {
+    public DiscordServer<SRV> convertSRV(SRV srv) {
         return adapter.getServerByID(adapter.getID(srv));
     }
 
-    private DiscordTextChannel<TXT> convertTXT(TXT txt) {
+    public DiscordTextChannel<TXT> convertTXT(TXT txt) {
         return adapter.getTextChannelByID(adapter.getID(txt));
     }
 
-    private DiscordUser<USR> convertUSR(USR usr) {
+    public DiscordUser<USR> convertUSR(USR usr) {
         return adapter.getUserByID(adapter.getID(usr));
     }
 
-    private DiscordMessage<MSG> convertMSG(MSG msg) {
+    public DiscordMessage<MSG> convertMSG(MSG msg) {
         return adapter.getMessageByID(adapter.getChannelOfMessage(msg).getID(), adapter.getID(msg));
     }
 }

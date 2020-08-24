@@ -1,5 +1,9 @@
 package org.comroid.dux.adapter;
 
-public interface DiscordEntity {
+import org.comroid.mutatio.ref.Reference;
+
+public interface DiscordEntity<S> {
     long getID();
+
+    Reference<S> getParentReference();
 }

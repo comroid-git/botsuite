@@ -1,19 +1,15 @@
 package org.comroid.dux.ui.input;
 
 import org.comroid.api.Junction;
-import org.comroid.api.UUIDContainer;
-import org.comroid.common.Disposable;
 import org.comroid.common.ref.Named;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.ui.AbstractAction;
 import org.comroid.mutatio.proc.Processor;
-import org.comroid.mutatio.span.Span;
 import org.comroid.uniform.HeldType;
 import org.comroid.uniform.ValueType;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.Closeable;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
@@ -76,28 +72,18 @@ public final class EnumInputSequence {
             return new EnumConstantsListener(displayMessage, targetUser == null ? -1 : targetUser.getID()).future;
         }
 
-        public class EnumConstantsListener extends AbstractAction {
-            public final CompletableFuture<R> future = new CompletableFuture<>();
-            private final long targetUserId;
-
+        public class EnumConstantsListener extends AbstractAction<R> {
             public EnumConstantsListener(DiscordMessage<MSG> displayMessage, long targetUserId) {
-                this.targetUserId = targetUserId;
+                super(targetUserId);
 
                 for (R value : values)
                     displayMessage.addReaction(value.getAlternateFormattedName());
-                future.thenRun(displayMessage.listenFor(this)::close);
+                future.thenRun(displayMessage.listenForReactions(this::handleReactionAdd));
             }
 
             protected void handleReactionAdd(long userId, String emoji) {
-                if (targetUserId != -1 && userId != targetUserId)
-                    return;
+                if (!isUserTargeted(userId)) return;
                 findValueByEmoji(emoji).ifPresent(future::complete);
-            }
-
-            @Override
-            public void close() {
-                if (!future.isDone())
-                    future.completeExceptionally(new RuntimeException("Input Aborted"));
             }
         }
     }

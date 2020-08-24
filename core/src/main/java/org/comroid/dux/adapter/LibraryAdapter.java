@@ -1,13 +1,10 @@
 package org.comroid.dux.adapter;
 
-import org.comroid.dux.adapter.DiscordMessage;
-import org.comroid.dux.adapter.DiscordServer;
-import org.comroid.dux.adapter.DiscordTextChannel;
-import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.model.ActionGenerator;
 import org.comroid.uniform.SerializationAdapter;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 
 public interface LibraryAdapter<BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE> extends ActionGenerator<TXT, USR, MSG> {
     SerializationAdapter<?,?,?> getSerializationAdapter();
@@ -29,6 +26,8 @@ public interface LibraryAdapter<BASE, SRV extends BASE, TXT extends BASE, USR ex
     String getMessageContent(MSG message);
 
     CompletableFuture<?> addReactionToMessage(MSG msg, String emoji);
+
+    Runnable listenForReactions(MSG msg, BiConsumer<Long, String> handler);
 
     boolean isMostRecentMessage(MSG msg);
 

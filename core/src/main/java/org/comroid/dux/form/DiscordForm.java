@@ -2,7 +2,8 @@ package org.comroid.dux.form;
 
 import org.comroid.annotations.Blocking;
 import org.comroid.api.Polyfill;
-import org.comroid.dux.adapter.LibraryAdapter;
+import org.comroid.dux.DiscordUX;
+import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
@@ -20,13 +21,13 @@ import java.util.function.Function;
 import static org.comroid.api.Polyfill.uncheckedCast;
 
 public class DiscordForm<SRV, TXT, USR, MSG> {
-    private final LibraryAdapter<Object, SRV, TXT, USR, MSG> adapter;
+    private final DiscordUX<SRV, TXT, USR, MSG> dux;
     private final DiscordTextChannel<TXT> inChannel;
     private final Span<FormStage<?, TXT, USR, MSG>> stages;
 
-    public DiscordForm(LibraryAdapter<Object, SRV, TXT, USR, MSG> adapter,
+    public DiscordForm(DiscordUX<SRV, TXT, USR, MSG> dux,
                        DiscordTextChannel<TXT> inChannel) {
-        this.adapter = adapter;
+        this.dux = dux;
         this.inChannel = inChannel;
         this.stages = new Span<>();
     }
@@ -56,20 +57,22 @@ public class DiscordForm<SRV, TXT, USR, MSG> {
     @Internal
     private final class FormExecutor {
         protected final CompletableFuture<UniObjectNode> future;
-        protected final TXT inChannel;
-        protected final USR targetUser;
+        protected final DiscordTextChannel<TXT> inChannel;
+        protected final DiscordUser<USR> targetUser;
 
         @Internal
         private FormExecutor(TXT inChannel, USR targetUser) {
-            this.inChannel = inChannel;
-            this.targetUser = targetUser;
+            this.inChannel = dux.convertTXT(inChannel);
+            this.targetUser = dux.convertUSR(targetUser);
             this.future = CompletableFuture.supplyAsync(this::execute);
         }
 
         @Blocking
         @Internal
         private UniObjectNode execute() {
-            return executeAndStoreRecursive(0, adapter.getSerializationAdapter().createUniObjectNode());
+            return executeAndStoreRecursive(0, dux.getAdapter()
+                    .getSerializationAdapter()
+                    .createUniObjectNode());
         }
 
         @Blocking
@@ -77,6 +80,7 @@ public class DiscordForm<SRV, TXT, USR, MSG> {
         private UniObjectNode executeAndStoreRecursive(final Object thisKey, final UniObjectNode data) {
             return findStage(thisKey).ifPresentMapOrElseGet(
                     stage -> stage.displayable.displayIn(inChannel)
+                            .map(dux::convertMSG)
                             .ifPresentMapOrElseGet(
                                     msg -> stage.inputSequence.listen(targetUser, msg),
                                     () -> Polyfill.failedFuture(new RuntimeException("Could not show displayable")))

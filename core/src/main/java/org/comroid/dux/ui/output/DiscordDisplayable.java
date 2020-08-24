@@ -1,5 +1,6 @@
 package org.comroid.dux.ui.output;
 
+import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.model.AdapterHolder;
 import org.comroid.mutatio.ref.FutureReference;
 
@@ -15,13 +16,15 @@ public abstract class DiscordDisplayable<TXT, MSG> implements AdapterHolder<Obje
     public abstract CompletableFuture<MSG> updateContent(MSG oldMessage);
 
     @Override
-    public final FutureReference<MSG> displayIn(final TXT channel) {
+    public final FutureReference<MSG> displayIn(final DiscordTextChannel<TXT> channel) {
         return alreadySent.compute(getAdapter().getID(channel), (k, v) -> {
             boolean isOld = false;
 
             if (v == null || (isOld = !v.test(getAdapter()::isMostRecentMessage))) {
                 if (isOld) v.ifPresent(getAdapter()::deleteMessage);
-                return new FutureReference<>(sendInto(channel));
+                return channel.getParentReference()
+                        .map(this::sendInto)
+                        .into(FutureReference::new);
             } else return new FutureReference<>(v.future.thenComposeAsync(this::updateContent));
         });
     }

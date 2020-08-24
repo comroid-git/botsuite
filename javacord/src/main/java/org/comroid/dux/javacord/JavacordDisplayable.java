@@ -1,6 +1,8 @@
 package org.comroid.dux.javacord;
 
 import org.comroid.api.Polyfill;
+import org.comroid.dux.adapter.DiscordMessage;
+import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.mutatio.ref.Reference;
@@ -34,7 +36,7 @@ public final class JavacordDisplayable {
         }
 
         @Override
-        public CompletableFuture<Message> sendInto(TextChannel channel) {
+        public CompletableFuture<Message> sendInto(DiscordTextChannel<TextChannel> channel) {
             return stringRef.ifPresentMapOrElseGet(
                     channel::sendMessage,
                     () -> Polyfill.failedFuture(new RuntimeException("Could not find string"))
@@ -42,7 +44,7 @@ public final class JavacordDisplayable {
         }
 
         @Override
-        public CompletableFuture<Message> updateContent(Message oldMessage) {
+        public CompletableFuture<Message> updateContent(DiscordMessage<Message> oldMessage) {
             return stringRef.process()
                     .map(oldMessage::edit)
                     .map(f -> f.thenCompose(n -> oldMessage.getLatestInstance()))
@@ -59,7 +61,7 @@ public final class JavacordDisplayable {
         }
 
         @Override
-        public CompletableFuture<Message> sendInto(TextChannel channel) {
+        public CompletableFuture<Message> sendInto(DiscordTextChannel<TextChannel> channel) {
             return embedRef.ifPresentMapOrElseGet(
                     channel::sendMessage,
                     () -> Polyfill.failedFuture(new RuntimeException("Could not find embed"))
@@ -67,7 +69,7 @@ public final class JavacordDisplayable {
         }
 
         @Override
-        public CompletableFuture<Message> updateContent(Message oldMessage) {
+        public CompletableFuture<Message> updateContent(DiscordMessage<Message> oldMessage) {
             return embedRef.process()
                     .map(oldMessage::edit)
                     .map(f -> f.thenCompose(n -> oldMessage.getLatestInstance()))

@@ -4,13 +4,18 @@ import org.comroid.mutatio.ref.Reference;
 
 import java.util.function.LongFunction;
 
-public final class DiscordUser<USR> implements DiscordEntity {
+public final class DiscordUser<USR> implements DiscordEntity<USR> {
     private final LibraryAdapter<? super USR, ?, ?, USR, ?> adapter;
     private final long id;
     private final Reference<USR> reference;
 
     public long getID() {
         return id;
+    }
+
+    @Override
+    public Reference<USR> getParentReference() {
+        return reference;
     }
 
     public boolean isHuman() {

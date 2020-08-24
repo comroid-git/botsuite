@@ -2,11 +2,7 @@ package org.comroid.dux.javacord;
 
 import org.comroid.api.Polyfill;
 import org.comroid.common.ref.Named;
-import org.comroid.dux.adapter.LibraryAdapter;
-import org.comroid.dux.adapter.DiscordMessage;
-import org.comroid.dux.adapter.DiscordServer;
-import org.comroid.dux.adapter.DiscordTextChannel;
-import org.comroid.dux.adapter.DiscordUser;
+import org.comroid.dux.adapter.*;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
@@ -29,6 +25,7 @@ import org.jetbrains.annotations.Contract;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -43,6 +40,7 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
     public SerializationAdapter<?, ?, ?> getSerializationAdapter() {
         return JacksonJSONAdapter.instance;
     }
+
     public JavacordDUX(DiscordApi api) {
         this.api = api;
     }
@@ -124,6 +122,15 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
                 .findAny()
                 .map(message::addReaction)
                 .orElseGet(() -> message.addReaction(emoji));
+    }
+
+    @Override
+    public Runnable listenForReactions(Message message, BiConsumer<Long, String> handler) {
+        return message.addReactionAddListener(
+                event -> handler.accept(
+                        event.getUser().getId(),
+                        event.getEmoji().getMentionTag()
+                ))::remove;
     }
 
     @Override
