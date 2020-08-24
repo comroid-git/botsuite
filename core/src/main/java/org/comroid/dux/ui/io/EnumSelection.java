@@ -2,11 +2,14 @@ package org.comroid.dux.ui.io;
 
 import org.comroid.api.Polyfill;
 import org.comroid.common.ref.Named;
+import org.comroid.common.ref.WrappedFormattable;
 import org.comroid.dux.DiscordUX;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.type.EnumHeldType;
+import org.comroid.dux.ui.AbstractAction;
+import org.comroid.mutatio.proc.Processor;
 import org.comroid.uniform.HeldType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public final class EnumSelection<R extends Enum<R> & Named, TXT, USR, MSG> extends CombinedAction<R, TXT, USR, MSG> {
     private final String key;
@@ -65,6 +69,35 @@ public final class EnumSelection<R extends Enum<R> & Named, TXT, USR, MSG> exten
 
     @Override
     public CompletableFuture<R> listen(@NotNull CompletableFuture<?> abortionFuture, @Nullable DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
-        return null;
+        final Listener listener = new Listener(displayMessage, targetUser != null ? targetUser.getID() : -1);
+        abortionFuture.thenRun(listener::close);
+        return listener.future;
+    }
+
+    private Processor<R> findValueByEmoji(String emoji) {
+        return Stream.of(values)
+                .filter(r -> r.getAlternateFormattedName().equals(emoji))
+                .findAny()
+                .map(Processor::ofConstant)
+                .orElseGet(Processor::empty);
+    }
+
+    private final class Listener extends AbstractAction<R> {
+        protected Listener(DiscordMessage<MSG> display, long targetUserId) {
+            super(targetUserId);
+
+            Runnable detacher = display.listenForReactions(this::handleReactions);
+            addChildren(detacher::run);
+            future.thenRun(detacher);
+
+            display.addReactions(Arrays.stream(values)
+                    .map(WrappedFormattable::getAlternateFormattedName)
+                    .toArray(String[]::new));
+        }
+
+        private void handleReactions(long userId, String emoji) {
+            if (isUserTargeted(userId))
+                findValueByEmoji(emoji).ifPresent(future::complete);
+        }
     }
 }
