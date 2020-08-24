@@ -6,7 +6,6 @@ import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
 import org.comroid.mutatio.pipe.BiPipe;
-import org.comroid.mutatio.pipe.Pipe;
 import org.comroid.mutatio.ref.Reference;
 import org.comroid.mutatio.ref.ReferenceIndex;
 import org.comroid.mutatio.span.Span;
@@ -19,7 +18,6 @@ import org.javacord.api.entity.DiscordEntity;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.emoji.Emoji;
-import org.javacord.api.entity.emoji.KnownCustomEmoji;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageSet;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -29,6 +27,7 @@ import org.javacord.api.util.DiscordRegexPattern;
 import org.javacord.core.entity.emoji.UnicodeEmojiImpl;
 import org.jetbrains.annotations.Contract;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -36,7 +35,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
-import java.util.stream.Stream;
 
 public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, TextChannel, User, Message> {
     public final DiscordApi api;
@@ -137,8 +135,8 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
             return message.addReactions(emojis);
 
         // prepare computation for emoji strings
-        final ReferenceIndex<String> pureStrings = ReferenceIndex.of(Arrays.asList(emojis));
-        BiPipe<String, Matcher, String, Matcher> matcherBase = pureStrings.pipe()
+        final ReferenceIndex<String> base = ReferenceIndex.of(Arrays.asList(emojis));
+        BiPipe<String, Matcher, String, Matcher> matcherBase = base.pipe()
                 .bi(DiscordRegexPattern.CUSTOM_EMOJI::matcher);
         // custom emojis accessor
         Span<Emoji> customEmojis = matcherBase
@@ -158,15 +156,15 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
                 .span();
 
         // compute and merge
-        final Emoji[] arr = new Emoji[emojis.length];
+        ArrayList<Emoji> yield = new ArrayList<>();
         for (int i = 0; i < emojis.length; i++) {
             final int c = i;
             unicodeEmojis.process(i)
                     .or(() -> customEmojis.get(c))
-                    .ifPresent(emoji -> arr[c] = emoji);
+                    .ifPresent(yield::add);
         }
 
-        return message.addReactions(arr);
+        return message.addReactions(yield.toArray(new Emoji[0]));
     }
 
     @Override
