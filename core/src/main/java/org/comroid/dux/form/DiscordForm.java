@@ -46,7 +46,11 @@ public class DiscordForm<SRV, TXT, USR, MSG> {
             InputSequence<R, USR, MSG> inputSequence,
             Function<R, @Nullable String> nextKeyResolver
     ) {
-        stages.add(new FormStage<>(key, displayable, inputSequence, nextKeyResolver));
+        return addStage(new FormStage<>(key, displayable, inputSequence, nextKeyResolver));
+    }
+
+    public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(FormStage<R, TXT, USR, MSG> stage) {
+        stages.add(stage);
         return this;
     }
 
