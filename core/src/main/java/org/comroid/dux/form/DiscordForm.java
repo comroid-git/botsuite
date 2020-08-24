@@ -46,7 +46,7 @@ public final class DiscordForm<SRV, TXT, USR, MSG> {
         return this;
     }
 
-    public final CompletableFuture<UniObjectNode> execute(TXT inChannel, USR targetUser) {
+    public final FormExecutor<TXT, USR, MSG> execute(TXT inChannel, USR targetUser) {
         return new FormExecutor<>(this, inChannel, targetUser);
     }
 

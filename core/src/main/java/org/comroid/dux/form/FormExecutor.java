@@ -18,7 +18,7 @@ import java.util.concurrent.ForkJoinPool;
 import static org.comroid.api.Polyfill.uncheckedCast;
 
 @Internal
-final class FormExecutor<TXT, USR, MSG> extends CompletableFuture<UniObjectNode> {
+public final class FormExecutor<TXT, USR, MSG> extends CompletableFuture<UniObjectNode> {
     private final DiscordForm<?, TXT, USR, MSG> form;
     protected final DiscordTextChannel<TXT> inChannel;
     protected final DiscordUser<USR> targetUser;
