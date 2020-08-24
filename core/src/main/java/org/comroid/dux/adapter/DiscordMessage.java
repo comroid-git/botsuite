@@ -38,4 +38,8 @@ public final class DiscordMessage<MSG> implements DiscordEntity<MSG> {
     public Runnable listenForReactions(BiConsumer<Long, String> handler) {
         return reference.into(msg -> adapter.listenForReactions(msg, handler));
     }
+
+    public DiscordTextChannel<?> getChannel() {
+        return reference.into(adapter::getChannelOfMessage);
+    }
 }

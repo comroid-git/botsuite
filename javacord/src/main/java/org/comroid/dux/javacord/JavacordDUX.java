@@ -1,11 +1,12 @@
 package org.comroid.dux.javacord;
 
 import org.comroid.api.Polyfill;
-import org.comroid.common.ref.Named;
 import org.comroid.dux.adapter.*;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
+import org.comroid.mutatio.pipe.BiPipe;
+import org.comroid.mutatio.pipe.Pipe;
 import org.comroid.mutatio.ref.Reference;
 import org.comroid.uniform.HeldType;
 import org.comroid.uniform.SerializationAdapter;
@@ -84,6 +85,15 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
     @Override
     public CompletableFuture<Message> send(TextChannel channel, String message) {
         return channel.sendMessage(message);
+    }
+
+    @Override
+    public Runnable listenForMessages(TextChannel channel, BiConsumer<Long, String> handler) {
+        return channel.addMessageCreateListener(
+                event -> handler.accept(
+                        event.getMessageAuthor().getId(),
+                        event.getReadableMessageContent()
+                ))::remove;
     }
 
     @Override

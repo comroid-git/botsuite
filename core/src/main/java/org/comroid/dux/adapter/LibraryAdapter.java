@@ -17,6 +17,8 @@ public interface LibraryAdapter<BASE, SRV extends BASE, TXT extends BASE, USR ex
 
     CompletableFuture<MSG> send(TXT channel, String message);
 
+    Runnable listenForMessages(TXT channel, BiConsumer<Long, String> handler);
+
     DiscordUser<USR> getUserByID(long id);
 
     boolean isHumanUser(USR usr);

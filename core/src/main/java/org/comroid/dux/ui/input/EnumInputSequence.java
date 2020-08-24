@@ -77,11 +77,11 @@ public final class EnumInputSequence {
                 super(targetUserId);
 
                 for (R value : values)
-                    displayMessage.addReaction(value.getAlternateFormattedName());
+                    displayMessage.addReactions(value.getAlternateFormattedName());
                 future.thenRun(displayMessage.listenForReactions(this::handleReactionAdd));
             }
 
-            protected void handleReactionAdd(long userId, String emoji) {
+            private void handleReactionAdd(long userId, String emoji) {
                 if (!isUserTargeted(userId)) return;
                 findValueByEmoji(emoji).ifPresent(future::complete);
             }

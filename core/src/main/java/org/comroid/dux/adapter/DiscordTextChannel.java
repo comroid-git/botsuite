@@ -2,6 +2,7 @@ package org.comroid.dux.adapter;
 
 import org.comroid.mutatio.ref.Reference;
 
+import java.util.function.BiConsumer;
 import java.util.function.LongFunction;
 
 public final class DiscordTextChannel<TXT> implements DiscordEntity<TXT> {
@@ -22,5 +23,9 @@ public final class DiscordTextChannel<TXT> implements DiscordEntity<TXT> {
         this.adapter = adapter;
         this.id = id;
         this.reference = Reference.provided(() -> txtSupplier.apply(this.id));
+    }
+
+    public Runnable listenForMessages(BiConsumer<Long, String> handler) {
+        return reference.into(chl -> adapter.listenForMessages(chl, handler));
     }
 }
