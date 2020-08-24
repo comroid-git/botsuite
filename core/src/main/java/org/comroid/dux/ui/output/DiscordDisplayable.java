@@ -17,7 +17,7 @@ public abstract class DiscordDisplayable<TXT, MSG> implements AdapterHolder<Obje
 
     @Override
     public final FutureReference<MSG> displayIn(final DiscordTextChannel<TXT> channel) {
-        return alreadySent.compute(getAdapter().getID(channel), (k, v) -> {
+        return alreadySent.compute(channel.getID(), (k, v) -> {
             boolean isOld = false;
 
             if (v == null || (isOld = !v.test(getAdapter()::isMostRecentMessage))) {
