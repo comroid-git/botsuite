@@ -56,7 +56,7 @@ public final class JavacordInputSequence {
                 }
             }
 
-            return new OnceListener(adapter.api, targetUser == null ? -1 : targetUser.getId()).future;
+            return new OnceListener(adapter.api, targetUser == null ? -1 : targetUser.getID()).future;
         }
     }
 
@@ -110,7 +110,7 @@ public final class JavacordInputSequence {
                 }
             }
 
-            return new YesNoListener(displayMessage, targetUser.getId()).future;
+            return new YesNoListener(displayMessage, targetUser.getID()).future;
         }
     }
 }
