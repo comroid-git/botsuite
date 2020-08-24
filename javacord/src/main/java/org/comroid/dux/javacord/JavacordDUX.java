@@ -172,9 +172,4 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
 
         throw new UnsupportedOperationException("Unsupported result type: " + resultType.getName());
     }
-
-    @Override
-    public <R extends Enum<R> & Named> InputSequence<R, User, Message> enumInput(Class<R> ofEnum) {
-        return new JavacordEnumInputSequence.SingleYield<>(ofEnum);
-    }
 }

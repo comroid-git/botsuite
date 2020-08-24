@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 public final class EnumInputSequence {
-    public static abstract class SingleYield<R extends Enum<R> & Named, USR, MSG> implements InputSequence<R, USR, MSG> {
+    public static final class SingleYield<R extends Enum<R> & Named, USR, MSG> implements InputSequence<R, USR, MSG> {
         private final Class<R> enumClass;
         private final R[] values;
         private final Junction<String, R> converter = Junction.ofString(name -> {

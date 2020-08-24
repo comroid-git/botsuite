@@ -6,4 +6,8 @@ public interface DiscordEntity<S> {
     long getID();
 
     Reference<S> getParentReference();
+
+    default S getParent() {
+        return getParentReference().get();
+    }
 }

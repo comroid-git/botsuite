@@ -48,12 +48,12 @@ public final class FormStage<R, TXT, USR, MSG> extends CombinedAction<R, TXT, US
     }
 
     @Override
-    public CompletableFuture<MSG> sendInto(DiscordTextChannel<TXT> channel) {
+    public CompletableFuture<MSG> sendInto(TXT channel) {
         return displayable.sendInto(channel);
     }
 
     @Override
-    public CompletableFuture<MSG> updateContent(DiscordMessage<MSG> oldMessage) {
+    public CompletableFuture<MSG> updateContent(MSG oldMessage) {
         return displayable.updateContent(oldMessage);
     }
 }

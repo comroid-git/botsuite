@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.LongFunction;
 
-public final class DiscordMessage<MSG> implements DiscordEntity {
+public final class DiscordMessage<MSG> implements DiscordEntity<MSG> {
     private final LibraryAdapter<? super MSG, ?, ?, ?, MSG> adapter;
     private final long id;
     private final Reference<MSG> reference;
