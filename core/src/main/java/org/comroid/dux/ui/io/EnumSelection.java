@@ -6,7 +6,6 @@ import org.comroid.dux.DiscordUX;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.adapter.LibraryAdapter;
-import org.comroid.dux.model.EmojiHolder;
 import org.comroid.dux.type.EnumHeldType;
 import org.comroid.uniform.HeldType;
 import org.jetbrains.annotations.NotNull;
@@ -16,12 +15,12 @@ import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-public final class EnumSelection<R extends Enum<R> & Named & EmojiHolder, TXT, USR, MSG> extends CombinedAction<R, TXT, USR, MSG> {
+public final class EnumSelection<R extends Enum<R> & Named, TXT, USR, MSG> extends CombinedAction<R, TXT, USR, MSG> {
     private final String key;
+    private final R[] values;
     private final EnumHeldType<R, TXT, USR> resultType;
     private final DiscordUX<?, TXT, USR, MSG> dux;
     private final Function<R, @Nullable String> followupResolver;
-    private final R[] values;
 
     @Override
     public String getName() {
@@ -41,9 +40,12 @@ public final class EnumSelection<R extends Enum<R> & Named & EmojiHolder, TXT, U
     public EnumSelection(
             DiscordUX<?, TXT, USR, MSG> dux,
             String key,
+            Object label,
             Class<R> enumType,
             @Nullable Function<R, @Nullable String> followupResolver
     ) {
+        super(dux.getAdapter().wrapIntoDisplayable(label));
+
         this.key = key;
         this.values = enumType.getEnumConstants();
         this.resultType = new EnumHeldType<>(enumType, name -> Arrays.stream(values)
@@ -62,17 +64,7 @@ public final class EnumSelection<R extends Enum<R> & Named & EmojiHolder, TXT, U
     }
 
     @Override
-    public CompletableFuture<R> listen(@NotNull CompletableFuture<?> abortionFuture, DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<MSG> sendInto(TXT channel) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<MSG> updateContent(MSG oldMessage) {
+    public CompletableFuture<R> listen(@NotNull CompletableFuture<?> abortionFuture, @Nullable DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
         return null;
     }
 }

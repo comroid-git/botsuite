@@ -1,7 +1,5 @@
 package org.comroid.dux.form;
 
-import org.comroid.dux.adapter.DiscordTextChannel;
-import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.ui.input.InputSequence;
@@ -16,7 +14,6 @@ import java.util.function.Function;
 
 public final class FormStage<R, TXT, USR, MSG> extends CombinedAction<R, TXT, USR, MSG> {
     protected final String key;
-    protected final DiscordDisplayable<TXT, MSG> displayable;
     protected final InputSequence<R, USR, MSG> inputSequence;
     protected final Function<R, @Nullable String> nextKeyResolver;
 
@@ -30,40 +27,26 @@ public final class FormStage<R, TXT, USR, MSG> extends CombinedAction<R, TXT, US
         return inputSequence.getResultType();
     }
 
-    @Override
-    public LibraryAdapter<Object, Object, TXT, Object, MSG> getAdapter() {
-        return displayable.getAdapter();
-    }
-
-    @Override
-    public CompletableFuture<R> listen(@NotNull CompletableFuture<?> abortionFuture, DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
-        return inputSequence.listen(abortionFuture, targetUser, displayMessage);
-    }
-
     public FormStage(
             String key,
             DiscordDisplayable<TXT, MSG> displayable,
             InputSequence<R, USR, MSG> inputSequence,
             Function<R, @Nullable String> nextKeyResolver
     ) {
+        super(displayable);
+
         this.key = key;
-        this.displayable = displayable;
         this.inputSequence = inputSequence;
         this.nextKeyResolver = nextKeyResolver;
     }
 
     @Override
+    public CompletableFuture<R> listen(@NotNull CompletableFuture<?> abortionFuture, @Nullable DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
+        return inputSequence.listen(abortionFuture, targetUser, displayMessage);
+    }
+
+    @Override
     public @Nullable String findFollowupKey(R forReponse) {
         return nextKeyResolver.apply(forReponse);
-    }
-
-    @Override
-    public CompletableFuture<MSG> sendInto(TXT channel) {
-        return displayable.sendInto(channel);
-    }
-
-    @Override
-    public CompletableFuture<MSG> updateContent(MSG oldMessage) {
-        return displayable.updateContent(oldMessage);
     }
 }

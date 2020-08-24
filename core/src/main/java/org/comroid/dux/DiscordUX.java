@@ -7,6 +7,7 @@ import org.comroid.dux.model.AdapterHolder;
 import org.comroid.dux.ui.input.EnumInputSequence;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.input.StandardInputSequence;
+import org.comroid.dux.ui.io.EnumSelection;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.HeldType;
 import org.comroid.uniform.ValueType;
@@ -44,17 +45,11 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
     }
 
     public <R extends Enum<R> & Named> InputSequence<R, USR, MSG> enumInput(Class<R> ofEnum) {
-        return enumInput(true, ofEnum);
+        return new EnumInputSequence.SingleYield<>(ofEnum);
     }
 
-    public <R extends Enum<R> & Named> InputSequence<R, USR, MSG> enumInput(boolean singleYield, Class<R> ofEnum) {
-        return singleYield
-                ? new EnumInputSequence.SingleYield<>(ofEnum)
-                : null; //todo
-    }
-
-    public DiscordForm<SRV, TXT, USR, MSG> createFormBuilder(TXT inChannel) {
-        return new DiscordForm<>(this, convertTXT(inChannel));
+    public DiscordForm<SRV, TXT, USR, MSG> createForm() {
+        return new DiscordForm<>(this);
     }
 
     public DiscordServer<SRV> convertSRV(SRV srv) {

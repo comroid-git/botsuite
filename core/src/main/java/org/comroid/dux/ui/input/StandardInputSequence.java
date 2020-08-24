@@ -7,6 +7,7 @@ import org.comroid.dux.ui.AbstractAction;
 import org.comroid.uniform.HeldType;
 import org.comroid.uniform.ValueType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,7 +25,7 @@ public final class StandardInputSequence {
         }
 
         @Override
-        public CompletableFuture<String> listen(@NotNull CompletableFuture<?> abortionFuture, DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
+        public CompletableFuture<String> listen(@NotNull CompletableFuture<?> abortionFuture, @Nullable DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
             class OnceListener extends AbstractAction<String> {
                 public final CompletableFuture<String> future = new CompletableFuture<>();
 
@@ -59,7 +60,7 @@ public final class StandardInputSequence {
         }
 
         @Override
-        public CompletableFuture<Boolean> listen(@NotNull CompletableFuture<?> abortionFuture, DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
+        public CompletableFuture<Boolean> listen(@NotNull CompletableFuture<?> abortionFuture, @Nullable DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
             class YesNoListener extends AbstractAction<Boolean> {
                 public YesNoListener(DiscordMessage<MSG> displayMessage, long targetUserId) {
                     super(targetUserId);

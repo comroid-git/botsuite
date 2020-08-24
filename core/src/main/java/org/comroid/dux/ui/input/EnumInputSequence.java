@@ -8,6 +8,7 @@ import org.comroid.dux.ui.AbstractAction;
 import org.comroid.mutatio.proc.Processor;
 import org.comroid.uniform.HeldType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
@@ -46,7 +47,7 @@ public final class EnumInputSequence {
         }
 
         @Override
-        public CompletableFuture<R> listen(@NotNull CompletableFuture<?> abortionFuture, DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
+        public CompletableFuture<R> listen(@NotNull CompletableFuture<?> abortionFuture, @Nullable DiscordUser<USR> targetUser, DiscordMessage<MSG> displayMessage) {
 
             return new EnumConstantsListener(displayMessage, targetUser == null ? -1 : targetUser.getID()).future;
         }

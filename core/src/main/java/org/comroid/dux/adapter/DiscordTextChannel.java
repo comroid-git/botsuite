@@ -1,7 +1,9 @@
 package org.comroid.dux.adapter;
 
+import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.mutatio.ref.Reference;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.LongFunction;
 
@@ -27,5 +29,9 @@ public final class DiscordTextChannel<TXT> implements DiscordEntity<TXT> {
 
     public Runnable listenForMessages(BiConsumer<Long, String> handler) {
         return reference.into(chl -> adapter.listenForMessages(chl, handler));
+    }
+
+    public <MSG> CompletableFuture<MSG> sendMessage(DiscordDisplayable<TXT, MSG> displayable) {
+        return reference.into(displayable::sendInto);
     }
 }
