@@ -21,6 +21,11 @@ public final class FormStage<R, TXT, USR, MSG> extends CombinedAction<R, TXT, US
     protected final Function<R, @Nullable String> nextKeyResolver;
 
     @Override
+    public String getName() {
+        return key;
+    }
+
+    @Override
     public HeldType<R> getResultType() {
         return inputSequence.getResultType();
     }
@@ -45,6 +50,11 @@ public final class FormStage<R, TXT, USR, MSG> extends CombinedAction<R, TXT, US
         this.displayable = displayable;
         this.inputSequence = inputSequence;
         this.nextKeyResolver = nextKeyResolver;
+    }
+
+    @Override
+    public @Nullable String findFollowupKey(R forReponse) {
+        return nextKeyResolver.apply(forReponse);
     }
 
     @Override
