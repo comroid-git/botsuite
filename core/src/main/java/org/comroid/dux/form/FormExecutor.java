@@ -8,33 +8,39 @@ import org.comroid.dux.ui.io.CombinedAction;
 import org.comroid.mutatio.proc.Processor;
 import org.comroid.uniform.node.UniArrayNode;
 import org.comroid.uniform.node.UniObjectNode;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 
 import static org.comroid.api.Polyfill.uncheckedCast;
 
 @Internal
-final class FormExecutor<TXT, USR, MSG> {
-    private final DiscordForm<Object, TXT, USR, MSG> discordForm;
-    protected final CompletableFuture<UniObjectNode> future;
+final class FormExecutor<TXT, USR, MSG> extends CompletableFuture<UniObjectNode> {
+    private final DiscordForm<?, TXT, USR, MSG> form;
     protected final DiscordTextChannel<TXT> inChannel;
     protected final DiscordUser<USR> targetUser;
 
     @Internal
-    FormExecutor(DiscordForm<Object, TXT, USR, MSG> discordForm, TXT inChannel, USR targetUser) {
-        this.discordForm = discordForm;
-        this.inChannel = discordForm.dux.convertTXT(inChannel);
-        this.targetUser = discordForm.dux.convertUSR(targetUser);
-        this.future = CompletableFuture.supplyAsync(this::execute);
+    FormExecutor(DiscordForm<?, TXT, USR, MSG> form, TXT inChannel, USR targetUser) {
+        this(ForkJoinPool.commonPool(), form, inChannel, targetUser);
+    }
+
+    @Internal
+    FormExecutor(Executor executor, DiscordForm<?, TXT, USR, MSG> form, TXT inChannel, USR targetUser) {
+        this.form = form;
+        this.inChannel = form.dux.convertTXT(inChannel);
+        this.targetUser = form.dux.convertUSR(targetUser);
+
+        executor.execute(() -> complete(execute()));
     }
 
     @Blocking
     @Internal
     private UniObjectNode execute() {
-        return executeAndStoreRecursive(0, discordForm.dux.getAdapter()
+        return executeAndStoreRecursive(0, form.dux.getAdapter()
                 .getSerializationAdapter()
                 .createUniObjectNode());
     }
@@ -44,7 +50,7 @@ final class FormExecutor<TXT, USR, MSG> {
     private UniObjectNode executeAndStoreRecursive(final Object thisKey, final UniObjectNode data) {
         return findStage(thisKey).ifPresentMapOrElseGet(
                 stage -> stage.displayIn(inChannel)
-                        .map(discordForm.dux::convertMSG)
+                        .map(form.dux::convertMSG)
                         .ifPresentMapOrElseGet(
                                 msg -> stage.listen(targetUser, msg),
                                 () -> Polyfill.failedFuture(new RuntimeException("Could not show displayable")))
@@ -72,14 +78,14 @@ final class FormExecutor<TXT, USR, MSG> {
 
     private Processor<? extends CombinedAction<?, TXT, USR, MSG>> findStage(Object key) {
         if (key instanceof Integer) {
-            if (((int) key) >= discordForm.stageCount())
+            if (((int) key) >= form.stageCount())
                 return Processor.empty();
 
-            return discordForm.stages.getReference((int) key).process();
+            return form.stages.getReference((int) key).process();
         } else {
             String strKey = String.valueOf(key);
 
-            return discordForm.stages.stream()
+            return form.stages.stream()
                     .filter(stage -> stage.getName().equals(strKey))
                     .findFirst()
                     .map(Processor::ofConstant)

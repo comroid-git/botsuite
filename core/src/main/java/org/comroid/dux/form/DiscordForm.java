@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-public class DiscordForm<SRV, TXT, USR, MSG> {
+public final class DiscordForm<SRV, TXT, USR, MSG> {
     public final DiscordUX<SRV, TXT, USR, MSG> dux;
     private final DiscordTextChannel<TXT> inChannel;
     final Span<CombinedAction<?, TXT, USR, MSG>> stages;
@@ -47,7 +47,7 @@ public class DiscordForm<SRV, TXT, USR, MSG> {
     }
 
     public final CompletableFuture<UniObjectNode> execute(TXT inChannel, USR targetUser) {
-        return new FormExecutor(this, inChannel, targetUser).future;
+        return new FormExecutor<>(this, inChannel, targetUser);
     }
 
     public int stageCount() {
