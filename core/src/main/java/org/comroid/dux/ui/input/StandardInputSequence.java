@@ -78,7 +78,7 @@ public final class StandardInputSequence {
                 }
             }
 
-            return new YesNoListener(displayMessage, targetUser.getId()).future;
+            return new YesNoListener(displayMessage, targetUser.getID()).future;
         }
     }
 }

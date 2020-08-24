@@ -27,7 +27,7 @@ public interface LibraryAdapter<BASE, SRV extends BASE, TXT extends BASE, USR ex
 
     String getMessageContent(MSG message);
 
-    CompletableFuture<?> addReactionToMessage(MSG msg, String emoji);
+    CompletableFuture<?> addReactionsToMessage(MSG msg, String... emoji);
 
     Runnable listenForReactions(MSG msg, BiConsumer<Long, String> handler);
 

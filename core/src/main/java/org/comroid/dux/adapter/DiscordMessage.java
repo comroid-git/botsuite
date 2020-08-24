@@ -31,8 +31,8 @@ public final class DiscordMessage<MSG> implements DiscordEntity<MSG> {
         this.reference = Reference.provided(() -> msgSupplier.apply(this.id));
     }
 
-    public CompletableFuture<?> addReaction(String emoji) {
-        return reference.into(msg -> adapter.addReactionToMessage(msg, emoji));
+    public CompletableFuture<?> addReactions(String... emoji) {
+        return reference.into(msg -> adapter.addReactionsToMessage(msg, emoji));
     }
 
     public Runnable listenForReactions(BiConsumer<Long, String> handler) {

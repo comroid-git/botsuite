@@ -8,6 +8,8 @@ import org.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
 import org.comroid.mutatio.pipe.BiPipe;
 import org.comroid.mutatio.pipe.Pipe;
 import org.comroid.mutatio.ref.Reference;
+import org.comroid.mutatio.ref.ReferenceIndex;
+import org.comroid.mutatio.span.Span;
 import org.comroid.uniform.HeldType;
 import org.comroid.uniform.SerializationAdapter;
 import org.comroid.uniform.ValueType;
@@ -16,18 +18,24 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.DiscordEntity;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.emoji.Emoji;
+import org.javacord.api.entity.emoji.KnownCustomEmoji;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageSet;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
+import org.javacord.api.util.DiscordRegexPattern;
+import org.javacord.core.entity.emoji.UnicodeEmojiImpl;
 import org.jetbrains.annotations.Contract;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
 import java.util.stream.Stream;
 
 public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, TextChannel, User, Message> {
@@ -124,14 +132,41 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
     }
 
     @Override
-    public CompletableFuture<?> addReactionToMessage(Message message, String emoji) {
-        return message.getServer()
-                .map(srv -> srv.getCustomEmojis().stream())
-                .orElseGet(Stream::empty)
-                .filter(custom -> custom.getMentionTag().equals(emoji))
-                .findAny()
-                .map(message::addReaction)
-                .orElseGet(() -> message.addReaction(emoji));
+    public CompletableFuture<?> addReactionsToMessage(Message message, String... emojis) {
+        if (message.isPrivateMessage())
+            return message.addReactions(emojis);
+
+        // prepare computation for emoji strings
+        final ReferenceIndex<String> pureStrings = ReferenceIndex.of(Arrays.asList(emojis));
+        BiPipe<String, Matcher, String, Matcher> matcherBase = pureStrings.pipe()
+                .bi(DiscordRegexPattern.CUSTOM_EMOJI::matcher);
+        // custom emojis accessor
+        Span<Emoji> customEmojis = matcherBase
+                .filterSecond(Matcher::matches)
+                .merge((str, mtc) -> mtc.group("id"))
+                .map(Long::parseLong)
+                .map(message.getServer().orElseThrow(AssertionError::new)::getCustomEmojiById)
+                .flatMap(Reference::optional)
+                .map(Emoji.class::cast)
+                .span();
+        // unicode emojis accessor
+        Span<Emoji> unicodeEmojis = matcherBase
+                .filterSecond(mtc -> !mtc.matches())
+                .drop()
+                .map(UnicodeEmojiImpl::fromString)
+                .map(Emoji.class::cast)
+                .span();
+
+        // compute and merge
+        final Emoji[] arr = new Emoji[emojis.length];
+        for (int i = 0; i < emojis.length; i++) {
+            final int c = i;
+            unicodeEmojis.process(i)
+                    .or(() -> customEmojis.get(c))
+                    .ifPresent(emoji -> arr[c] = emoji);
+        }
+
+        return message.addReactions(arr);
     }
 
     @Override
