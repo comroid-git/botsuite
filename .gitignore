@@ -1,12 +1,12 @@
-
 # Created by https://www.gitignore.io/api/gradle,intellij
 # Edit at https://www.gitignore.io/?templates=gradle,intellij
 
-# Ignore IDEA Platform configurations
+# Ignore IDEA Platform directories
 .idea/
+**/out/**
 
 ### Gradle ###
-.gradle
+.gradle/
 build/
 
 # Ignore Gradle GUI config
@@ -23,5 +23,7 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
+
+docs/
 
 # End of https://www.gitignore.io/api/gradle,intellij
