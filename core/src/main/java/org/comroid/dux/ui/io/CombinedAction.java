@@ -1,6 +1,6 @@
 package org.comroid.dux.ui.io;
 
-import org.comroid.common.ref.Named;
+import org.comroid.api.Named;
 import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;

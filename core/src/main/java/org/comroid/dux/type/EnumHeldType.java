@@ -1,8 +1,8 @@
 package org.comroid.dux.type;
 
 import org.comroid.api.Junction;
-import org.comroid.common.ref.Named;
-import org.comroid.uniform.HeldType;
+import org.comroid.api.Named;
+import org.comroid.api.HeldType;
 import org.comroid.uniform.ValueType;
 
 import java.util.function.Function;

@@ -4,7 +4,7 @@ import org.comroid.dux.DiscordUX;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.ui.AbstractAction;
-import org.comroid.uniform.HeldType;
+import org.comroid.api.HeldType;
 import org.comroid.uniform.ValueType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
