@@ -1,18 +1,17 @@
 package org.comroid.dux.type;
 
-import org.comroid.api.Junction;
-import org.comroid.api.Named;
 import org.comroid.api.HeldType;
+import org.comroid.api.Named;
 import org.comroid.uniform.ValueType;
 
 import java.util.function.Function;
 
 public class EnumHeldType<R extends Enum<R> & Named, USR, MSG> implements HeldType<R> {
     private final Class<R> enumType;
-    private final Junction<String, R> converter;
+    private final Function<String, R> converter;
 
     @Override
-    public Junction<String, R> getConverter() {
+    public Function<String, R> getConverter() {
         return converter;
     }
 
@@ -23,7 +22,7 @@ public class EnumHeldType<R extends Enum<R> & Named, USR, MSG> implements HeldTy
 
     public EnumHeldType(Class<R> enumType, Function<String, R> parser) {
         this.enumType = enumType;
-        this.converter = Junction.ofString(parser);
+        this.converter = parser;
     }
 
     @Override
