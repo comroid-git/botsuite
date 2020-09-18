@@ -59,6 +59,7 @@ subprojects {
     }
 
     compileJava.options.encoding = 'UTF-8'
+
     repositories {
         mavenLocal()
         maven {
@@ -73,7 +74,11 @@ subprojects {
     dependencies {
         compileOnly 'org.jetbrains:annotations:19.0.0'
 
-        implementation project(':common-util:uniform')
+        if (System.getenv().containsKey("TEAMCITY")) {
+            implementation 'com.github.comroid-git.common-util:uniform:master-SNAPSHOT'
+        } else {
+            implementation project(':common-util:uniform')
+        }
 
         implementation 'com.google.flogger:flogger:0.5.1'
 
