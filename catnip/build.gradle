@@ -1,7 +1,7 @@
 version '0.1.0-SNAPSHOT'
 
 dependencies {
-    if (System.getenv().containsKey("TEAMCITY")) {
+    if (isAutoDeploy) {
         api project(':core')
     } else {
         api project(':discord-ux:core')

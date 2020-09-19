@@ -74,7 +74,7 @@ subprojects {
     dependencies {
         compileOnly 'org.jetbrains:annotations:19.0.0'
 
-        if (System.getenv().containsKey("TEAMCITY")) {
+        if (isAutoDeploy) {
             implementation 'com.github.comroid-git.common-util:uniform:master-SNAPSHOT'
         } else {
             implementation project(':common-util:uniform')

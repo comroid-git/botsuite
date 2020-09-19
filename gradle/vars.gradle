@@ -1,6 +1,8 @@
 import static java.lang.System.getenv
 
 ext {
+    isAutoDeploy = getenv().containsKey("TEAMCITY") || getenv().containsKey("JITPACK");
+
     artifactName = 'discordbotlist-stats'
     projectName = 'Discord Bot List Stats'
     projectDescription = 'Library for posting stats to most available Discord Bot Lists!'
