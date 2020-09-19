@@ -11,6 +11,10 @@ ext {
 
     sonatypeUsername = getenv("sonatypeUsername")
     sonatypePassword = getenv("sonatypePassword")
+    canSign = getenv().containsKey('GPG_KEYNAME') && getenv().containsKey('GPG_PASSPHRASE')
 }
 
-ext."signing.password" = getenv("gpgKeyPassword")
+if (canSign) {
+    ext.'signing.gnupg.keyName' = getenv('GPG_KEYNAME')
+    ext.'signing.gnupg.passphrase' = getenv('GPG_PASSPHRASE')
+}
