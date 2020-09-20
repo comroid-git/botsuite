@@ -1,4 +1,4 @@
-rootProject.name = 'discordbotlist-stats'
+rootProject.name = 'discord-ux'
 
 include(':core')
 
