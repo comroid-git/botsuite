@@ -1,17 +1,29 @@
-if (project == rootProject)
-    apply plugin: "io.codearte.nexus-staging"
+apply plugin: 'maven-publish'
 
-subprojects {
-    apply plugin: 'maven-publish'
-    apply plugin: 'signing'
+publishing {
+    repositories {
+        mavenLocal()
 
-    publishing {
-        repositories {
+        if (canPublishToSpace) {
             maven {
+                name = 'Space'
                 url = snapshot
-                        ? "https://oss.sonatype.org/content/repositories/snapshots"
-                        : "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-                name = "Sonatype"
+                        ? 'https://maven.jetbrains.space/comroid/snapshot'
+                        : 'https://maven.jetbrains.space/comroid/release'
+
+                credentials {
+                    username spaceUsername
+                    password spacePassword
+                }
+            }
+        }
+
+        if (canPublishToSonatype) {
+            maven {
+                name = 'Sonatype'
+                url = snapshot
+                        ? 'https://oss.sonatype.org/content/repositories/snapshots'
+                        : 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
 
                 credentials {
                     username sonatypeUsername
@@ -20,64 +32,70 @@ subprojects {
             }
         }
 
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-                if (project.name.equals("${rootProject.name}".toString())) {
-                    artifactId = "${artifactName}"
-                } else {
-                    artifactId = "${artifactName}-${project.name}"
-                    artifact sourcesJar
-                    artifact javadocJar
+        if (canPublishToGitHub) {
+            maven {
+                name = "GitHubPackages"
+                url = githubRegistryUrl
+
+                credentials {
+                    username githubUsername
+                    password githubPassword
                 }
-
-                pom {
-                    name = projectName
-                    description = projectDescription
-                    inceptionYear = '2019'
-                    url = "https://github.com/burdoto/${artifactName}-${project.name}".toString()
-
-                    licenses {
-                        license {
-                            name = 'The Apache License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id = "burdoto"
-                            name = "Tobias Burdow"
-                            email = "burdoto@outlook.com"
-                        }
-                    }
-
-                    scm {
-                        connection = "scm:git:git://github.com/burdoto/${projectName}.git".toString()
-                        developerConnection = "scm:git:ssh://github.com/burdoto/${projectName}.git".toString()
-                        url = "https://github.com/burdoto/${projectName}".toString()
-                    }
-                }
-
-                System.out.println("Registered artifact publication: '${group}:${artifactId}:${project.version}'")
             }
         }
     }
 
-    task generateGithubPom(type: GenerateMavenPom) {
-        destination = file("$projectDir/pom.xml")
-        pom = publishing.publications.mavenJava.pom
-    }
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = artifactName
+            from components.java
 
-    if (!System.getenv().containsKey('JITPACK')) {
-        signing {
-            useGpgCmd()
-            sign publishing.publications.mavenJava
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = rootProject.name
+                description = project.projectDescription
+                inceptionYear = '2020'
+                url = "https://github.com/$userbase/$rootProject.name".toString()
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'kaleidox'
+                        name = 'Tobias Burdow'
+                        email = 'contact@comroid.org'
+                    }
+                }
+
+                scm {
+                    connection = "scm:git:git://github.com/$userbase/${rootProject.name}.git".toString()
+                    developerConnection = "scm:git:ssh://github.com/$userbase/${rootProject.name}.git".toString()
+                    url = "https://github.com/$userbase/$rootProject.name".toString()
+                }
+            }
+
+            System.out.println("Registered artifact publication: '${group}:${artifactId}:${project.version}' -> $project.projectDescription")
         }
     }
 }
 
-nexusStaging {
-    username sonatypeUsername.toString()
-    password sonatypePassword.toString()
+task generateGithubPom(type: GenerateMavenPom) {
+    destination = file("$projectDir/pom.xml")
+    pom = publishing.publications.mavenJava.pom
+}
+
+if (canSign) {
+    apply plugin: 'signing'
+
+    signing {
+        useGpgCmd()
+        sign publishing.publications.mavenJava
+    }
 }
