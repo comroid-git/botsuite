@@ -14,7 +14,7 @@ tasks.findByName('wrapper')?.configure {
 }
 
 allprojects {
-    apply from: "${parent == null ? path : parent.path}/gradle/vars.gradle"
+    apply from: "${parent == null ? projectDir.path : parent.projectDir.path}/gradle/vars.gradle"
 
     def exportedProjects = [
             ':core',
