@@ -8,22 +8,22 @@ apply plugin: 'java-library'
 group 'org.comroid'
 version '0.1.0-SNAPSHOT'
 
-apply from: 'gradle/vars.gradle'
-
-def exportedProjects = [
-        ':core',
-        ':catnip',
-        ':discord4j',
-        ':javacord',
-        ':jda'
-]
-
 tasks.findByName('wrapper')?.configure {
     gradleVersion = '5.2'
     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
 
 allprojects {
+    apply from: 'gradle/vars.gradle'
+
+    def exportedProjects = [
+            ':core',
+            ':catnip',
+            ':discord4j',
+            ':javacord',
+            ':jda'
+    ]
+
     task sourcesJar(type: Jar) {
         from sourceSets.main.allJava
         archiveClassifier = "sources"
@@ -86,6 +86,7 @@ subprojects {
         testImplementation 'org.easymock:easymock:4.0.2'
         testCompileOnly 'org.codehaus.groovy:groovy:3.0.0-beta-3'
     }
+    apply from: 'gradle/publishing.gradle'
 }
 /*
 task allJavadoc(type: Javadoc) {
@@ -95,4 +96,3 @@ task allJavadoc(type: Javadoc) {
     options.destinationDirectory(file("./docs/"))
 }*/
 
-apply from: 'gradle/publishing.gradle'
