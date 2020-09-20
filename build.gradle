@@ -14,7 +14,7 @@ tasks.findByName('wrapper')?.configure {
 }
 
 allprojects {
-    apply from: 'gradle/vars.gradle'
+    apply from: "${name == 'discord-ux' ? '.' : '..'}/gradle/vars.gradle"
 
     def exportedProjects = [
             ':core',
