@@ -42,7 +42,7 @@ allprojects {
 subprojects {
     apply plugin: 'java-library'
 
-    group 'de.kaleidox'
+    group 'org.comroid'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
