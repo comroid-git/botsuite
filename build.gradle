@@ -14,6 +14,7 @@ tasks.findByName('wrapper')?.configure {
 }
 
 allprojects {
+    System.out.println("${parent == null ? projectDir.path : parent.projectDir.path}/gradle/vars.gradle")
     apply from: "${parent == null ? projectDir.path : parent.projectDir.path}/gradle/vars.gradle"
 
     def exportedProjects = [
