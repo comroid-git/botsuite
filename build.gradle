@@ -15,7 +15,7 @@ tasks.findByName('wrapper')?.configure {
 
 allprojects {
     ext {
-        refDir = parent == null ? projectDir.path : parent.projectDir.path
+        refDir = parent == null | parent.name == 'repo' ? projectDir.path : parent.projectDir.path
     }
 
     apply from: "$refDir/gradle/vars.gradle"
