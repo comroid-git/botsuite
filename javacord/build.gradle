@@ -8,7 +8,7 @@ dependencies {
     } else {
         api project(':discord-ux:core')
         api project(':javacord-utilities')
-        implementation project(':common-util:uniform').sourceSets.java8compat.output.classesDirs
+        implementation project(':guardian:uniform').sourceSets.java8compat.output.classesDirs
     }
 
     compileOnly 'org.javacord:javacord-api:3.0.4'
