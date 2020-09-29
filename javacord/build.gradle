@@ -4,7 +4,7 @@ dependencies {
     if (isAutoDeploy) {
         api project(':core')
         implementation 'com.github.comroid-git:javacord-utilities:master-SNAPSHOT'
-        implementation 'com.github.comroid-git.common-util:uniform:master-SNAPSHOT'
+        implementation 'com.github.comroid-git.guardian-framework:uniform:master-SNAPSHOT'
     } else {
         api project(':discord-ux:core')
         api project(':javacord-utilities')
