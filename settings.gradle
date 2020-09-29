@@ -1,6 +1,6 @@
 rootProject.name = 'botsuite'
 
-include(':core')
+include(':botcore')
 
 include(':catnip')
 include(':discord4j')

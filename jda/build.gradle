@@ -2,9 +2,9 @@ version '0.1.0-SNAPSHOT'
 
 dependencies {
     if (isAutoDeploy) {
-        api project(':core')
+        api project(':botcore')
     } else {
-        api project(':botsuite:core')
+        api project(':botsuite:botcore')
     }
 
     compileOnly 'net.dv8tion:JDA:3.8.3_463'
