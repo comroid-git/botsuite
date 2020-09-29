@@ -7,13 +7,13 @@
   <!-- that they should prefer consuming it instead. -->
   <!-- do_not_remove: published-with-gradle-metadata -->
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.kaleidox</groupId>
-  <artifactId>discordbotlist-stats-catnip</artifactId>
-  <version>0.1.0</version>
-  <name>Discord Bot List Stats</name>
-  <description>Library for posting stats to most available Discord Bot Lists!</description>
-  <url>https://github.com/burdoto/discordbotlist-stats-catnip</url>
-  <inceptionYear>2019</inceptionYear>
+  <groupId>org.comroid</groupId>
+  <artifactId>dux</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <name>repo</name>
+  <description>Forms helper methods for Discord Platform</description>
+  <url>https://github.com/comroid-git/repo</url>
+  <inceptionYear>2020</inceptionYear>
   <licenses>
     <license>
       <name>The Apache License, Version 2.0</name>
@@ -22,33 +22,27 @@
   </licenses>
   <developers>
     <developer>
-      <id>burdoto</id>
+      <id>kaleidox</id>
       <name>Tobias Burdow</name>
-      <email>burdoto@outlook.com</email>
+      <email>contact@comroid.org</email>
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/burdoto/Discord Bot List Stats.git</connection>
-    <developerConnection>scm:git:ssh://github.com/burdoto/Discord Bot List Stats.git</developerConnection>
-    <url>https://github.com/burdoto/Discord Bot List Stats</url>
+    <connection>scm:git:git://github.com/comroid-git/repo.git</connection>
+    <developerConnection>scm:git:ssh://github.com/comroid-git/repo.git</developerConnection>
+    <url>https://github.com/comroid-git/repo</url>
   </scm>
   <dependencies>
     <dependency>
-      <groupId>de.kaleidox</groupId>
-      <artifactId>discordbotlist-stats-core</artifactId>
-      <version>0.2.0</version>
+      <groupId>org.comroid</groupId>
+      <artifactId>dux</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.comroid</groupId>
-      <artifactId>restless</artifactId>
-      <version>0.15.2</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.comroid</groupId>
-      <artifactId>varbind</artifactId>
-      <version>0.20.0</version>
+      <artifactId>uniform</artifactId>
+      <version>0.16.1-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
