@@ -1,3 +1,11 @@
 version '0.1.0-SNAPSHOT'
 
+dependencies {
+    if (isAutoDeploy) {
+        implementation 'com.github.comroid-git.guardian-framework:varbind:master-SNAPSHOT'
+    } else {
+        api project(':guardian:varbind')
+    }
+}
+
 apply from: "$refDir/gradle/publishing.gradle"

@@ -9,6 +9,14 @@ public abstract class BotBase<BASE, SRV extends BASE, TXT extends BASE, USR exte
     protected final LibraryAdapter<BASE, SRV, TXT, USR, MSG> libraryAdapter;
     protected final FileHandle dataDir;
 
+    public SerializationAdapter<?, ?, ?> getSerializationAdapter() {
+        return serializationAdapter;
+    }
+
+    public LibraryAdapter<BASE, SRV, TXT, USR, MSG> getLibraryAdapter() {
+        return libraryAdapter;
+    }
+
     public FileHandle getDataDir() {
         return dataDir;
     }
