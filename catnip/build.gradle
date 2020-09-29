@@ -11,3 +11,5 @@ dependencies {
     runtimeOnly 'com.fasterxml.jackson.core:jackson-databind:2.10.0.pr2'
     runtimeOnly 'com.squareup.okhttp3:okhttp:3.14.3'
 }
+
+apply from: "$refDir/gradle/publishing.gradle"

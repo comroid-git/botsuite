@@ -11,3 +11,5 @@ dependencies {
     runtimeOnly 'org.json:json:20190722'
     runtimeOnly 'com.squareup.okhttp3:okhttp:3.14.3'
 }
+
+apply from: "$refDir/gradle/publishing.gradle"

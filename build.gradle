@@ -93,8 +93,6 @@ subprojects {
         testImplementation 'org.easymock:easymock:4.0.2'
         testCompileOnly 'org.codehaus.groovy:groovy:3.0.0-beta-3'
     }
-
-    apply from: "$refDir/gradle/publishing.gradle"
 }
 /*
 task allJavadoc(type: Javadoc) {
