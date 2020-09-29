@@ -3,7 +3,7 @@ import static java.lang.System.getenv
 ext {
     isAutoDeploy = rootProject.name != 'repo' || getenv().containsKey("TEAMCITY") || getenv().containsKey("JITPACK");
 
-    artifactName = 'dux'
+    artifactName = project.name
     projectName = 'DUX'
     projectDescription = 'Forms helper methods for Discord Platform'
     userbase = 'comroid-git'
