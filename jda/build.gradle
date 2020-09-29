@@ -4,7 +4,7 @@ dependencies {
     if (isAutoDeploy) {
         api project(':core')
     } else {
-        api project(':discord-ux:core')
+        api project(':botsuite:core')
     }
 
     compileOnly 'net.dv8tion:JDA:3.8.3_463'

@@ -4,7 +4,7 @@ dependencies {
     if (isAutoDeploy) {
         api project(':core')
     } else {
-        api project(':discord-ux:core')
+        api project(':botsuite:core')
     }
 
     compileOnly 'com.mewna:catnip:1.3.4'

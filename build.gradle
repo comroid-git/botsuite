@@ -13,12 +13,21 @@ tasks.findByName('wrapper')?.configure {
     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
 
-allprojects {
+subprojects {
     ext {
         refDir = parent == null || parent.name == 'repo' ? projectDir.path : parent.projectDir.path
     }
 
+    group 'org.comroid'
+    apply plugin: 'java-library'
     apply from: "$refDir/gradle/vars.gradle"
+
+    sourceSets {
+        main.java.srcDirs = files("$refDir/src/$project.name/main/java")
+        main.resources.srcDirs = files("$refDir/src/$project.name/main/resources")
+        test.java.srcDirs = files("$refDir/src/$project.name/test/java")
+        test.resources.srcDirs = files("$refDir/src/$project.name/test/resources")
+    }
 
     def exportedProjects = [
             ':core',
@@ -54,12 +63,6 @@ allprojects {
             ]
         }
     }
-}
-
-subprojects {
-    apply plugin: 'java-library'
-
-    group 'org.comroid'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8

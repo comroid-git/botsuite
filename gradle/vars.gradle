@@ -3,9 +3,9 @@ import static java.lang.System.getenv
 ext {
     isAutoDeploy = rootProject.name != 'repo' || getenv().containsKey("TEAMCITY") || getenv().containsKey("JITPACK");
 
-    artifactName = 'dux-'+project.name
-    projectName = 'DUX'
-    projectDescription = 'Forms helper methods for Discord Platform'
+    artifactName = 'botsuite-'+project.name
+    projectName = 'BotSuite'
+    projectDescription = 'Bot Suite'
     userbase = 'comroid-git'
 
     snapshot = project.version.endsWith("-SNAPSHOT")

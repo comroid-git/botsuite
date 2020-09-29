@@ -6,7 +6,7 @@ dependencies {
         implementation 'com.github.comroid-git:javacord-utilities:master-SNAPSHOT'
         implementation 'com.github.comroid-git.guardian-framework:uniform:master-SNAPSHOT'
     } else {
-        api project(':discord-ux:core')
+        api project(':botsuite:core')
         api project(':javacord-utilities')
         implementation project(':guardian:uniform').sourceSets.java8compat.output.classesDirs
     }

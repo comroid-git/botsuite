@@ -1,4 +1,4 @@
-rootProject.name = 'discord-ux'
+rootProject.name = 'botsuite'
 
 include(':core')
 
