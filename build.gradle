@@ -79,7 +79,7 @@ subprojects {
         compileOnly 'org.jetbrains:annotations:19.0.0'
 
         if (isAutoDeploy) {
-            implementation 'com.github.comroid-git.common-util:uniform:master-SNAPSHOT'
+            implementation 'com.github.comroid-git.guardian-framework:uniform:master-SNAPSHOT'
         } else {
             implementation project(':guardian:uniform')
         }
