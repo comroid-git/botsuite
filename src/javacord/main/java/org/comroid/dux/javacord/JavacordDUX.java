@@ -182,7 +182,7 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
     public Runnable listenForReactions(Message message, BiConsumer<Long, String> handler) {
         return message.addReactionAddListener(
                 event -> handler.accept(
-                        event.getUser().getId(),
+                        event.getUserId(),
                         event.getEmoji().getMentionTag()
                 ))::remove;
     }
