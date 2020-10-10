@@ -1,16 +1,19 @@
 package org.comroid.botsuite;
 
+import org.comroid.api.ContextualProvider;
 import org.comroid.common.io.FileHandle;
 import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.uniform.SerializationAdapter;
 
-public abstract class BotBase<BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE> {
-    protected final SerializationAdapter<?, ?, ?> serializationAdapter;
+public abstract class BotBase<BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE>
+        implements ContextualProvider.Underlying {
     protected final LibraryAdapter<BASE, SRV, TXT, USR, MSG> libraryAdapter;
     protected final FileHandle dataDir;
+    private final ContextualProvider context;
 
+    @Deprecated
     public SerializationAdapter<?, ?, ?> getSerializationAdapter() {
-        return serializationAdapter;
+        return requireFromContext(SerializationAdapter.class);
     }
 
     public LibraryAdapter<BASE, SRV, TXT, USR, MSG> getLibraryAdapter() {
@@ -21,12 +24,17 @@ public abstract class BotBase<BASE, SRV extends BASE, TXT extends BASE, USR exte
         return dataDir;
     }
 
+    @Override
+    public ContextualProvider getUnderlyingContextualProvider() {
+        return context;
+    }
+
     protected BotBase(
-            SerializationAdapter<?, ?, ?> serializationAdapter,
+            ContextualProvider context,
             LibraryAdapter<BASE, SRV, TXT, USR, MSG> libraryAdapter,
             FileHandle dataDir
     ) {
-        this.serializationAdapter = serializationAdapter;
+        this.context = context;
         this.libraryAdapter = libraryAdapter;
         this.dataDir = dataDir;
     }

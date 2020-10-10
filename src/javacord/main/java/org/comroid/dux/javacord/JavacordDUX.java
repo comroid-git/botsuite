@@ -22,6 +22,7 @@ import org.javacord.api.entity.user.User;
 import org.javacord.api.util.DiscordRegexPattern;
 import org.javacord.core.entity.emoji.UnicodeEmojiImpl;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +42,11 @@ public final class JavacordDUX implements LibraryAdapter<DiscordEntity, Server, 
 
     @Override
     public SerializationAdapter<?, ?, ?> getSerializationAdapter() {
+        return getFromContext();
+    }
+
+    @Override
+    public @NotNull SerializationAdapter<?, ?, ?> getFromContext() {
         return JacksonJSONAdapter.instance;
     }
 
