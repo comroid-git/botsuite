@@ -1,5 +1,6 @@
 package org.comroid.dux.form;
 
+import org.comroid.api.HeldType;
 import org.comroid.api.Named;
 import org.comroid.dux.DiscordUX;
 import org.comroid.dux.ui.input.InputSequence;
@@ -7,7 +8,6 @@ import org.comroid.dux.ui.io.CombinedAction;
 import org.comroid.dux.ui.io.EnumSelection;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.mutatio.span.Span;
-import org.comroid.api.HeldType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;

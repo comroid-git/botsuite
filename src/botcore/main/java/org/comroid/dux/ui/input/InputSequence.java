@@ -1,8 +1,8 @@
 package org.comroid.dux.ui.input;
 
+import org.comroid.api.HeldType;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
-import org.comroid.api.HeldType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

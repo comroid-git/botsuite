@@ -1,8 +1,6 @@
 package org.comroid.dux.javacord;
 
 import org.comroid.api.Polyfill;
-import org.comroid.dux.adapter.DiscordMessage;
-import org.comroid.dux.adapter.DiscordTextChannel;
 import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.mutatio.ref.Reference;

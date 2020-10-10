@@ -25,6 +25,10 @@ public final class DiscordMessage<MSG> implements DiscordEntity<MSG> {
         return reference.into(adapter::getMessageContent);
     }
 
+    public DiscordTextChannel<?> getChannel() {
+        return reference.into(adapter::getChannelOfMessage);
+    }
+
     public DiscordMessage(LibraryAdapter<? super MSG, ?, ?, ?, MSG> adapter, long id, LongFunction<MSG> msgSupplier) {
         this.adapter = adapter;
         this.id = id;
@@ -37,9 +41,5 @@ public final class DiscordMessage<MSG> implements DiscordEntity<MSG> {
 
     public Runnable listenForReactions(BiConsumer<Long, String> handler) {
         return reference.into(msg -> adapter.listenForReactions(msg, handler));
-    }
-
-    public DiscordTextChannel<?> getChannel() {
-        return reference.into(adapter::getChannelOfMessage);
     }
 }

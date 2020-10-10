@@ -3,16 +3,15 @@ package org.comroid.dux.adapter;
 import org.comroid.api.ContextualTypeProvider;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.SerializationAdapter;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-public interface LibraryAdapter<BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE> extends ContextualTypeProvider<SerializationAdapter<?,?,?>> {
+public interface LibraryAdapter<BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE> extends ContextualTypeProvider<SerializationAdapter<?, ?, ?>> {
     @Deprecated
-    SerializationAdapter<?,?,?> getSerializationAdapter();
+    SerializationAdapter<?, ?, ?> getSerializationAdapter();
 
-    DiscordDisplayable<TXT,MSG> wrapIntoDisplayable(Object display);
+    DiscordDisplayable<TXT, MSG> wrapIntoDisplayable(Object display);
 
     long getID(BASE of);
 

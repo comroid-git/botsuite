@@ -19,9 +19,9 @@ import static org.comroid.api.Polyfill.uncheckedCast;
 
 @Internal
 public final class FormExecutor<TXT, USR, MSG> extends CompletableFuture<UniObjectNode> {
-    private final DiscordForm<?, TXT, USR, MSG> form;
     protected final DiscordTextChannel<TXT> inChannel;
     protected final DiscordUser<USR> targetUser;
+    private final DiscordForm<?, TXT, USR, MSG> form;
 
     @Internal
     FormExecutor(DiscordForm<?, TXT, USR, MSG> form, TXT inChannel, USR targetUser) {

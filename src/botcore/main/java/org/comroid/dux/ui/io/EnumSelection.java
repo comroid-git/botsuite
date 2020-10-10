@@ -1,7 +1,8 @@
 package org.comroid.dux.ui.io;
 
-import org.comroid.api.Polyfill;
+import org.comroid.api.HeldType;
 import org.comroid.api.Named;
+import org.comroid.api.Polyfill;
 import org.comroid.api.WrappedFormattable;
 import org.comroid.dux.DiscordUX;
 import org.comroid.dux.adapter.DiscordMessage;
@@ -10,7 +11,6 @@ import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.type.EnumHeldType;
 import org.comroid.dux.ui.AbstractAction;
 import org.comroid.mutatio.proc.Processor;
-import org.comroid.api.HeldType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

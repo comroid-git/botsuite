@@ -1,11 +1,11 @@
 package org.comroid.dux.form;
 
+import org.comroid.api.HeldType;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.io.CombinedAction;
 import org.comroid.dux.ui.output.DiscordDisplayable;
-import org.comroid.api.HeldType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
