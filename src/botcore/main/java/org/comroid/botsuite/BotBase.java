@@ -11,11 +11,6 @@ public abstract class BotBase<BASE, SRV extends BASE, TXT extends BASE, USR exte
     protected final FileHandle dataDir;
     private final ContextualProvider context;
 
-    @Deprecated
-    public SerializationAdapter<?, ?, ?> getSerializationAdapter() {
-        return requireFromContext(SerializationAdapter.class);
-    }
-
     public LibraryAdapter<BASE, SRV, TXT, USR, MSG> getLibraryAdapter() {
         return libraryAdapter;
     }
@@ -34,7 +29,7 @@ public abstract class BotBase<BASE, SRV extends BASE, TXT extends BASE, USR exte
             LibraryAdapter<BASE, SRV, TXT, USR, MSG> libraryAdapter,
             FileHandle dataDir
     ) {
-        this.context = context;
+        this.context = ContextualProvider.create(context, libraryAdapter);
         this.libraryAdapter = libraryAdapter;
         this.dataDir = dataDir;
     }
