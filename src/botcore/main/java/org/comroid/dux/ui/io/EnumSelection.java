@@ -10,7 +10,7 @@ import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.adapter.LibraryAdapter;
 import org.comroid.dux.type.EnumHeldType;
 import org.comroid.dux.ui.AbstractAction;
-import org.comroid.mutatio.proc.Processor;
+import org.comroid.mutatio.ref.Processor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
