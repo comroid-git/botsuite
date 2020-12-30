@@ -1,10 +1,8 @@
 package org.comroid.botsuite;
 
 import org.comroid.api.ContextualProvider;
-import org.comroid.api.ContextualTypeProvider;
 import org.comroid.common.io.FileHandle;
 import org.comroid.dux.adapter.LibraryAdapter;
-import org.comroid.uniform.SerializationAdapter;
 
 public abstract class BotBase<BASE, SRV extends BASE, TXT extends BASE, USR extends BASE, MSG extends BASE>
         implements ContextualProvider.Underlying {

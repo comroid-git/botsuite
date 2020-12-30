@@ -1,6 +1,5 @@
 package org.comroid.dux.adapter;
 
-import org.comroid.api.ContextualTypeProvider;
 import org.comroid.dux.ui.output.DiscordDisplayable;
 import org.comroid.uniform.SerializationAdapter;
 
