@@ -32,4 +32,9 @@ public class EnumHeldType<R extends Enum<R> & Named, USR, MSG> implements HeldTy
             return (T) value.getName();
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Class<R> getTargetClass() {
+        return enumType;
+    }
 }
