@@ -5,7 +5,7 @@ import org.comroid.dux.DiscordUX;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.ui.AbstractAction;
-import org.comroid.uniform.ValueType;
+import org.comroid.uniform.node.impl.StandardValueType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,7 @@ public final class StandardInputSequence {
 
         @Override
         public HeldType<String> getResultType() {
-            return ValueType.STRING;
+            return StandardValueType.STRING;
         }
 
         public OfString(DiscordUX<?, ?, USR, MSG> dux) {
@@ -52,7 +52,7 @@ public final class StandardInputSequence {
 
         @Override
         public HeldType<Boolean> getResultType() {
-            return ValueType.BOOLEAN;
+            return StandardValueType.BOOLEAN;
         }
 
         public OfBoolean(DiscordUX<?, ?, USR, MSG> dux) {

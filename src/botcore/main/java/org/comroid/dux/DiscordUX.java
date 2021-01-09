@@ -9,7 +9,7 @@ import org.comroid.dux.ui.input.EnumInputSequence;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.input.StandardInputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
-import org.comroid.uniform.ValueType;
+import org.comroid.uniform.node.impl.StandardValueType;
 
 import static org.comroid.api.Polyfill.uncheckedCast;
 
@@ -36,9 +36,9 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
     }
 
     public <R> InputSequence<R, USR, MSG> input(HeldType<R> resultType) {
-        if (resultType.equals(ValueType.STRING))
+        if (resultType.equals(StandardValueType.STRING))
             return uncheckedCast(new StandardInputSequence.OfString<>(this));
-        if (resultType.equals(ValueType.BOOLEAN))
+        if (resultType.equals(StandardValueType.BOOLEAN))
             return uncheckedCast(new StandardInputSequence.OfBoolean<>(this));
         throw new UnsupportedOperationException(String.format("Unrecognized result type: %s", resultType));
     }

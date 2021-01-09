@@ -2,7 +2,7 @@ package org.comroid.dux.type;
 
 import org.comroid.api.HeldType;
 import org.comroid.api.Named;
-import org.comroid.uniform.ValueType;
+import org.comroid.uniform.node.impl.StandardValueType;
 
 import java.util.function.Function;
 
@@ -27,7 +27,7 @@ public class EnumHeldType<R extends Enum<R> & Named, USR, MSG> implements HeldTy
 
     @Override
     public <T> T convert(R value, HeldType<T> toType) {
-        if (toType.equals(ValueType.STRING))
+        if (toType.equals(StandardValueType.STRING))
             //noinspection unchecked
             return (T) value.getName();
         throw new UnsupportedOperationException();
