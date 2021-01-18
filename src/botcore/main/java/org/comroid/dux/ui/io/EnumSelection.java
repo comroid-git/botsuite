@@ -1,6 +1,6 @@
 package org.comroid.dux.ui.io;
 
-import org.comroid.api.HeldType;
+import org.comroid.api.ValueType;
 import org.comroid.api.Named;
 import org.comroid.api.Polyfill;
 import org.comroid.api.WrappedFormattable;
@@ -8,7 +8,7 @@ import org.comroid.dux.DiscordUX;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.adapter.LibraryAdapter;
-import org.comroid.dux.type.EnumHeldType;
+import org.comroid.dux.type.EnumValueType;
 import org.comroid.dux.ui.AbstractAction;
 import org.comroid.mutatio.ref.Processor;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 public final class EnumSelection<R extends Enum<R> & Named, TXT, USR, MSG> extends CombinedAction<R, TXT, USR, MSG> {
     private final String key;
     private final R[] values;
-    private final EnumHeldType<R, TXT, USR> resultType;
+    private final EnumValueType<R, TXT, USR> resultType;
     private final DiscordUX<?, TXT, USR, MSG> dux;
     private final Function<R, @Nullable String> followupResolver;
 
@@ -32,7 +32,7 @@ public final class EnumSelection<R extends Enum<R> & Named, TXT, USR, MSG> exten
     }
 
     @Override
-    public HeldType<R> getResultType() {
+    public ValueType<R> getResultType() {
         return resultType;
     }
 
@@ -52,7 +52,7 @@ public final class EnumSelection<R extends Enum<R> & Named, TXT, USR, MSG> exten
 
         this.key = key;
         this.values = enumType.getEnumConstants();
-        this.resultType = new EnumHeldType<>(enumType, name -> Arrays.stream(values)
+        this.resultType = new EnumValueType<>(enumType, name -> Arrays.stream(values)
                 .filter(v -> v.getName().equalsIgnoreCase(name))
                 .findAny()
                 .orElse(null));

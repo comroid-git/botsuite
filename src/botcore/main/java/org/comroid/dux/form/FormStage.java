@@ -1,6 +1,6 @@
 package org.comroid.dux.form;
 
-import org.comroid.api.HeldType;
+import org.comroid.api.ValueType;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.ui.input.InputSequence;
@@ -23,7 +23,7 @@ public final class FormStage<R, TXT, USR, MSG> extends CombinedAction<R, TXT, US
     }
 
     @Override
-    public HeldType<R> getResultType() {
+    public ValueType<R> getResultType() {
         return inputSequence.getResultType();
     }
 

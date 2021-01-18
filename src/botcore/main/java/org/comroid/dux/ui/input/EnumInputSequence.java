@@ -1,10 +1,10 @@
 package org.comroid.dux.ui.input;
 
-import org.comroid.api.HeldType;
+import org.comroid.api.ValueType;
 import org.comroid.api.Named;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
-import org.comroid.dux.type.EnumHeldType;
+import org.comroid.dux.type.EnumValueType;
 import org.comroid.dux.ui.AbstractAction;
 import org.comroid.mutatio.ref.Processor;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public final class EnumInputSequence {
     public static final class SingleYield<R extends Enum<R> & Named, USR, MSG> implements InputSequence<R, USR, MSG> {
-        private final EnumHeldType<R, USR, MSG> enumType;
+        private final EnumValueType<R, USR, MSG> enumType;
         private final R[] values;
 
         public R[] getValues() {
@@ -23,12 +23,12 @@ public final class EnumInputSequence {
         }
 
         @Override
-        public HeldType<R> getResultType() {
+        public ValueType<R> getResultType() {
             return enumType;
         }
 
         public SingleYield(Class<R> ofEnum) {
-            this.enumType = new EnumHeldType<>(ofEnum, name -> {
+            this.enumType = new EnumValueType<>(ofEnum, name -> {
                 for (R value : getValues()) {
                     if (value.getName().equalsIgnoreCase(name))
                         return value;

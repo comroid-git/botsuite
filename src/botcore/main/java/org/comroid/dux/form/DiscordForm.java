@@ -1,6 +1,6 @@
 package org.comroid.dux.form;
 
-import org.comroid.api.HeldType;
+import org.comroid.api.ValueType;
 import org.comroid.api.Named;
 import org.comroid.dux.DiscordUX;
 import org.comroid.dux.ui.input.InputSequence;
@@ -24,7 +24,7 @@ public final class DiscordForm<SRV, TXT, USR, MSG> {
     public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(
             String key,
             Object label,
-            HeldType<R> resultType
+            ValueType<R> resultType
     ) {
         return addStage(key, dux.wrapIntoDisplayable(label), resultType, any -> null);
     }
@@ -32,7 +32,7 @@ public final class DiscordForm<SRV, TXT, USR, MSG> {
     public final <R> DiscordForm<SRV, TXT, USR, MSG> addStage(
             String key,
             Object label,
-            HeldType<R> resultType,
+            ValueType<R> resultType,
             Function<R, @Nullable String> nextKeyResolver
     ) {
         return addStage(key, dux.wrapIntoDisplayable(label), dux.input(resultType), nextKeyResolver);

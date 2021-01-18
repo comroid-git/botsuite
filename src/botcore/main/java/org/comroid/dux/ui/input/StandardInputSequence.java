@@ -1,6 +1,6 @@
 package org.comroid.dux.ui.input;
 
-import org.comroid.api.HeldType;
+import org.comroid.api.ValueType;
 import org.comroid.dux.DiscordUX;
 import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
@@ -16,7 +16,7 @@ public final class StandardInputSequence {
         private final DiscordUX<?, ?, USR, MSG> dux;
 
         @Override
-        public HeldType<String> getResultType() {
+        public ValueType<String> getResultType() {
             return StandardValueType.STRING;
         }
 
@@ -51,7 +51,7 @@ public final class StandardInputSequence {
         private final DiscordUX<?, ?, USR, MSG> dux;
 
         @Override
-        public HeldType<Boolean> getResultType() {
+        public ValueType<Boolean> getResultType() {
             return StandardValueType.BOOLEAN;
         }
 

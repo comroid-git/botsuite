@@ -1,6 +1,6 @@
 package org.comroid.dux;
 
-import org.comroid.api.HeldType;
+import org.comroid.api.ValueType;
 import org.comroid.api.Named;
 import org.comroid.dux.adapter.*;
 import org.comroid.dux.form.DiscordForm;
@@ -35,7 +35,7 @@ public final class DiscordUX<SRV, TXT, USR, MSG> implements AdapterHolder<SRV, T
         return adapter.wrapIntoDisplayable(display);
     }
 
-    public <R> InputSequence<R, USR, MSG> input(HeldType<R> resultType) {
+    public <R> InputSequence<R, USR, MSG> input(ValueType<R> resultType) {
         if (resultType.equals(StandardValueType.STRING))
             return uncheckedCast(new StandardInputSequence.OfString<>(this));
         if (resultType.equals(StandardValueType.BOOLEAN))

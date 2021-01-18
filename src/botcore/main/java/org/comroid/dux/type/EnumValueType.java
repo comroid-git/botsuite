@@ -1,12 +1,12 @@
 package org.comroid.dux.type;
 
-import org.comroid.api.HeldType;
+import org.comroid.api.ValueType;
 import org.comroid.api.Named;
 import org.comroid.uniform.node.impl.StandardValueType;
 
 import java.util.function.Function;
 
-public class EnumHeldType<R extends Enum<R> & Named, USR, MSG> implements HeldType<R> {
+public class EnumValueType<R extends Enum<R> & Named, USR, MSG> implements ValueType<R> {
     private final Class<R> enumType;
     private final Function<String, R> converter;
 
@@ -20,13 +20,13 @@ public class EnumHeldType<R extends Enum<R> & Named, USR, MSG> implements HeldTy
         return enumType.getSimpleName();
     }
 
-    public EnumHeldType(Class<R> enumType, Function<String, R> parser) {
+    public EnumValueType(Class<R> enumType, Function<String, R> parser) {
         this.enumType = enumType;
         this.converter = parser;
     }
 
     @Override
-    public <T> T convert(R value, HeldType<T> toType) {
+    public <T> T convert(R value, ValueType<T> toType) {
         if (toType.equals(StandardValueType.STRING))
             //noinspection unchecked
             return (T) value.getName();
