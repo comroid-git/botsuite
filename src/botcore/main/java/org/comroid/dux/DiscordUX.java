@@ -9,7 +9,7 @@ import org.comroid.dux.ui.input.EnumInputSequence;
 import org.comroid.dux.ui.input.InputSequence;
 import org.comroid.dux.ui.input.StandardInputSequence;
 import org.comroid.dux.ui.output.DiscordDisplayable;
-import org.comroid.uniform.node.impl.StandardValueType;
+import org.comroid.util.StandardValueType;
 
 import static org.comroid.api.Polyfill.uncheckedCast;
 

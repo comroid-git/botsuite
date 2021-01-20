@@ -2,7 +2,7 @@ package org.comroid.dux.type;
 
 import org.comroid.api.ValueType;
 import org.comroid.api.Named;
-import org.comroid.uniform.node.impl.StandardValueType;
+import org.comroid.util.StandardValueType;
 
 import java.util.function.Function;
 
