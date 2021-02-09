@@ -6,7 +6,6 @@ import org.comroid.dux.adapter.DiscordMessage;
 import org.comroid.dux.adapter.DiscordUser;
 import org.comroid.dux.type.EnumValueType;
 import org.comroid.dux.ui.AbstractAction;
-import org.comroid.mutatio.ref.Processor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
