@@ -41,7 +41,7 @@ public final class FormExecutor<TXT, USR, MSG> extends CompletableFuture<UniObje
     private UniObjectNode execute() {
         return executeAndStoreRecursive(0, form.dux.getAdapter()
                 .getSerializationAdapter()
-                .createUniObjectNode());
+                .createObjectNode());
     }
 
     @Blocking
